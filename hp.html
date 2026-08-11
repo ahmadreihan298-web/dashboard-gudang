@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Barang Keluar - Mobile</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="hp.css" />
+</head>
+
+<body class="hp-body">
+
+  <!-- Header -->
+  <header class="hp-header">
+    <button class="hp-menu-toggle" id="hpMenuToggle" title="Menu"><i data-feather="menu"></i></button>
+  </header>
+
+  <!-- Sidebar HP -->
+  <aside class="hp-sidebar" id="hpSidebar">
+    <div class="hp-sidebar-title">Menu</div>
+    <button class="hp-sidebar-item active" data-view="form"><i data-feather="package"></i><span>PA</span></button>
+    <button class="hp-sidebar-item" data-view="pi"><i data-feather="package"></i><span>PI</span></button>
+    <button class="hp-sidebar-item" data-view="stok"><i data-feather="bar-chart-2"></i><span>Stok</span></button>
+    <button class="hp-sidebar-item" data-view="riwayat"><i data-feather="list"></i><span>Riwayat</span></button>
+    <div class="hp-sidebar-divider"></div>
+    <a href="dashboard.html" class="hp-sidebar-item hp-sidebar-link"><i data-feather="shuffle"></i><span>Pindah Perangkat</span></a>
+  </aside>
+  <div class="hp-overlay" id="hpOverlay"></div>
+
+  <!-- Konten -->
+  <main class="hp-main">
+
+    <!-- View Form Barang Keluar (PA / PI via sidebar) -->
+    <div class="hp-view active" id="hp-view-form">
+      <div class="form-container">
+        <form id="formBarangKeluar" class="input-form">
+          <div class="hp-form-top">
+            <span class="hp-form-label" id="hpCurrentCode">PA</span>
+            <input type="date" id="barangKeluarTanggal" required>
+          </div>
+          <div class="search-container" style="margin: 0 0 16px; max-width: 100%; width: 100%;">
+            <div class="search-wrapper">
+              <i data-feather="search" class="search-icon"></i>
+              <input type="text" class="search-input" id="searchBarangKeluar"
+                placeholder="Cari nama barang..." />
+            </div>
+          </div>
+          <div id="barangKeluarCodeTabs" class="item-code-tabs"></div>
+          <div id="barangKeluarTabContent" class="item-tab-content"></div>
+        </form>
+      </div>
+      <div class="hp-total-harga-panel">
+        <span class="hp-total-label"><i data-feather="tag"></i> Total Harga</span>
+        <span class="hp-total-value" id="totalHargaBarangKeluar">Rp 0</span>
+      </div>
+      <div class="hp-save-bar">
+        <button type="submit" form="formBarangKeluar" class="btn-proses"><i data-feather="save"></i> Simpan Barang Keluar</button>
+      </div>
+    </div>
+
+    <!-- View Stok -->
+    <div class="hp-view" id="hp-view-stok">
+      <h2 class="section-title"><i data-feather="bar-chart-2"></i> Stok Barang</h2>
+      <div class="search-container" style="margin: 0 0 16px; max-width: 100%; width: 100%;">
+        <div class="search-wrapper">
+          <i data-feather="search" class="search-icon"></i>
+          <input type="text" class="search-input" id="searchHpStock"
+            placeholder="Cari nama barang atau gudang..." />
+        </div>
+      </div>
+      <div class="hp-stock-list" id="hpStockList"></div>
+    </div>
+
+    <!-- View Riwayat -->
+    <div class="hp-view" id="hp-view-riwayat">
+      <h2 class="section-title"><i data-feather="list"></i> Riwayat Barang Keluar</h2>
+      <div class="hp-history" id="hpHistoryBarangKeluar"></div>
+    </div>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <script src="data.js"></script>
+  <script src="persistence.js"></script>
+  <script>
+    // HP: renderAll menyegarkan form aktif + stok + riwayat
+    function renderAll() {
+      const current = (typeof hpCurrentSuffix === 'string' ? hpCurrentSuffix : 'PA');
+      populateBarangKeluarForm(current);
+      renderStockListHP();
+      renderRiwayatBarangKeluarHP();
+    }
+  </script>
+  <script src="barangKeluar.js"></script>
+  <script>
+    feather.replace();
+    async function initHp() {
+      await loadAllData();
+      initHpSidebar();
+      renderAll();
+    }
+    initHp();
+  </script>
+</body>
+
+</html>

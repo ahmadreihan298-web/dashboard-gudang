@@ -1,0 +1,528 @@
+/* ================================================================
+   HP PAGE — Tampilan Mobile khusus Barang Keluar
+   ================================================================ */
+
+/* Body: vertikal, scroll, tanpa sidebar flex */
+body.hp-body {
+  display: block;
+  height: auto;
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+.hp-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.hp-header h1 {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.hp-header h1 i {
+  color: var(--primary);
+  width: 18px;
+  height: 18px;
+}
+
+.hp-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.hp-back i {
+  width: 18px;
+  height: 18px;
+}
+
+.hp-main {
+  padding: 10px;
+}
+
+body.hp-body {
+  display: block;
+  height: auto;
+  min-height: 100vh;
+  overflow-y: auto;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.hp-menu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.hp-menu-toggle i {
+  width: 18px;
+  height: 18px;
+}
+
+/* Sidebar HP */
+.hp-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 220px;
+  height: 100vh;
+  z-index: 1200;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
+  padding: 12px 8px;
+  transform: translateX(-100%);
+  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hp-sidebar.open {
+  transform: translateX(0);
+}
+
+.hp-sidebar-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  padding: 6px 10px 10px;
+}
+
+.hp-sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+}
+
+.hp-sidebar-item i {
+  width: 18px;
+  height: 18px;
+}
+
+.hp-sidebar-item:hover,
+.hp-sidebar-item.active {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.hp-sidebar-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 6px 4px;
+}
+
+.hp-sidebar-link {
+  text-decoration: none;
+  margin-top: auto;
+}
+
+.hp-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.35);
+  z-index: 1100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.hp-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* View switching */
+.hp-view {
+  display: none;
+}
+
+.hp-view.active {
+  display: block;
+}
+
+/* Daftar stok */
+.hp-stock-list {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.hp-stock-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.hp-stock-row:last-child {
+  border-bottom: none;
+}
+
+.hp-stock-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.hp-stock-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hp-stock-kode .badge {
+  font-size: 9px;
+  padding: 1px 5px;
+}
+
+.hp-stock-gudang {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.hp-stock-gudang i {
+  width: 10px;
+  height: 10px;
+}
+
+.hp-stock-qty {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+/* Baris atas form: label "Pilih Barang" kiri, tanggal kanan */
+.hp-form-top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.hp-form-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+/* Input tanggal di pojok kanan atas — angka doang, tanpa label/border */
+.hp-form-top input[type="date"] {
+  width: 120px;
+  height: 30px;
+  font-size: 12px;
+  text-align: right;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+/* Bar tombol simpan melayang di bawah */
+.hp-save-bar {
+  position: sticky;
+  bottom: 8px;
+  z-index: 90;
+  margin-top: 12px;
+  padding: 8px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+}
+
+.hp-save-bar .btn-proses {
+  width: 100%;
+  justify-content: center;
+}
+
+.hp-total-harga-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 12px 0;
+  padding: 12px 16px;
+  background: var(--primary-soft);
+  border: 1px solid rgba(37, 99, 235, 0.35);
+  border-radius: var(--radius-sm);
+}
+
+.hp-total-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.hp-total-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* Kartu barang tampil 2 kolom bersebelahan di HP */
+.hp-body .item-card-container {
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 6px !important;
+}
+
+.hp-body .item-card-container .item-card-keluar {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.hp-body .item-card-keluar {
+  padding: 6px 8px;
+  gap: 4px;
+  border-radius: 8px;
+  min-width: 0;
+  overflow: hidden;
+  word-wrap: break-word;
+  box-shadow: none;
+  border: 1px solid var(--border-color);
+}
+
+.hp-body .item-card-keluar.selected {
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+/* Header kartu: nama di baris sendiri, qty di bawah (tidak saling desak) */
+.hp-body .item-card-keluar-header {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  min-width: 0;
+}
+
+.hp-body .item-card-keluar .item-name {
+  font-size: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+  max-width: 100%;
+  width: 100%;
+  min-width: 0;
+  flex: none;
+  min-height: 13px;
+}
+
+.hp-body .item-card-keluar .item-qty-input {
+  width: 100%;
+  height: 28px;
+  font-size: 12px;
+  padding: 0 4px;
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.hp-body .set-all-qty-input {
+  width: 80px;
+  height: 32px;
+}
+
+/* Tab judul kode (grup) — kecil & ringkas di HP */
+.hp-body .item-code-tabs {
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.hp-body .item-code-tab-btn {
+  padding: 5px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid transparent;
+}
+
+.hp-body .item-code-tab-btn.active {
+  background: var(--primary-soft);
+  color: var(--primary);
+  border-color: var(--primary);
+  border-radius: 6px;
+}
+
+/* Sub-tab angka (1, 2, 3, ...) — kecil & ringkas di HP */
+.hp-body .item-sub-tabs {
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.hp-body .item-sub-tab-btn {
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid transparent;
+}
+
+.hp-body .item-sub-tab-btn.active {
+  background: var(--primary-soft);
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+/* Kontrol select-all & set qty lebih ringkas di HP */
+.hp-body .select-all-container {
+  gap: 6px !important;
+  align-items: center !important;
+}
+
+.hp-body .select-all-label,
+.hp-body .select-all-container .select-all-checkbox {
+  width: 32px !important;
+  height: 32px !important;
+}
+
+.hp-body .set-all-qty-wrapper {
+  gap: 4px;
+}
+
+.hp-body .set-all-qty-input {
+  width: 80px;
+  height: 32px;
+  position: static;
+  top: auto;
+}
+
+.hp-main .table-wrapper {
+  margin-left: 0;
+  margin-right: 0;
+  width: auto;
+  border-radius: var(--radius-sm);
+}
+
+.hp-main .form-actions .btn-proses {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Tabel agar ringkas di layar kecil */
+.hp-main table {
+  font-size: 11px;
+}
+
+.hp-main td,
+.hp-main th {
+  padding: 8px 8px;
+  white-space: nowrap;
+}
+
+.hp-main td:nth-child(5) {
+  white-space: normal;
+  min-width: 100px;
+  max-width: 160px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/* Riwayat barang keluar versi mobile (nama + jumlah) */
+.hp-history {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.hp-history-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.hp-history-row:last-child {
+  border-bottom: none;
+}
+
+.hp-history-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-main);
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hp-history-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.hp-history-date {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.hp-history-qty {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary);
+  flex-shrink: 0;
+}

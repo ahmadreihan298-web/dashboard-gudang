@@ -1,0 +1,432 @@
+﻿// ================================================================
+//  GUDANG (WAREHOUSE)
+// ================================================================
+const addWarehouseFormContainer = document.getElementById('add-warehouse-form-container');
+const addWarehouseForm = document.getElementById('addWarehouseForm');
+const cancelAddWarehouseBtn = document.getElementById('cancelAddWarehouseBtn');
+const toggleAddWarehouseFormBtn = document.getElementById('toggleAddWarehouseFormBtn');
+
+const moveWarehouseFormContainer = document.getElementById('move-warehouse-form-container');
+const moveWarehouseForm = document.getElementById('moveWarehouseForm');
+const itemToMoveSelect = document.getElementById('itemToMove');
+const destinationWarehouseSelect = document.getElementById('destinationWarehouse');
+const quantityToMoveInput = document.getElementById('quantityToMove');
+const availableStockInfo = document.getElementById('availableStockInfo');
+const cancelMoveWarehouseBtn = document.getElementById('cancelMoveWarehouseBtn');
+const toggleMoveWarehouseFormBtn = document.getElementById('toggleMoveWarehouseFormBtn');
+
+// Event listener for item selection to update quantity input
+itemToMoveSelect.addEventListener('change', function () {
+  const selectedItemIdx = parseInt(this.value);
+  if (isNaN(selectedItemIdx)) {
+    quantityToMoveInput.disabled = true;
+    quantityToMoveInput.value = '';
+    availableStockInfo.textContent = '';
+    return;
+  }
+
+  const item = dataBarang.find(i => i._idx === selectedItemIdx);
+  if (item) {
+    quantityToMoveInput.disabled = false;
+    quantityToMoveInput.max = item.datang;
+    quantityToMoveInput.value = 1; // Default to 1
+    availableStockInfo.textContent = `Stok tersedia: ${item.datang.toLocaleString('id-ID')}`;
+  }
+});
+
+function renderGudang() {
+  const container = document.getElementById('gudang-summary-container');
+  if (!container) return;
+
+  // 1. Group data by warehouse
+  const gudangData = dataBarang.reduce((acc, item) => {
+    const gudang = item.gudang || 'Tidak Diketahui';
+    if (!acc[gudang]) {
+      acc[gudang] = {
+        items: [],
+        suppliers: new Set(),
+        totalStock: 0
+      };
+    }
+    acc[gudang].items.push(item);
+    acc[gudang].suppliers.add(item.supplier);
+    acc[gudang].totalStock += item.datang;
+    return acc;
+  }, {});
+
+  // 2. Generate HTML
+  let html = '';
+  // Gabungkan gudang dari data master (gudangList) dan gudang yang ada di dataBarang
+  const warehousesInData = new Set(dataBarang.map(item => item.gudang).filter(Boolean));
+  const allGudangKeys = new Set([...gudangList, ...warehousesInData]);
+  const gudangKeys = Array.from(allGudangKeys).sort();
+
+  if (gudangKeys.length === 0) {
+    html = `<div class="empty-page" style="height: auto; grid-column: 1 / -1;">
+              <div class="big-icon"><i data-feather="box"></i></div>
+              <h2 style="margin-top:16px;">Tidak Ada Data Gudang</h2>
+              <p style="margin-top:8px;">Belum ada data barang dengan informasi gudang, atau belum ada gudang yang ditambahkan secara manual.</p>
+            </div>`;
+  } else {
+    gudangKeys.forEach(gudang => {
+      const data = gudangData[gudang] || { items: [], suppliers: new Set(), totalStock: 0 };
+      html += `
+        <div class="gudang-card">
+          <div class="gudang-card-header">
+            <div class="icon"><i data-feather="archive"></i></div>
+            <h3>Gudang ${gudang}</h3>
+          </div>
+          <div class="gudang-stats">
+            <div class="gudang-stat">
+              <span class="label">Jumlah Jenis Item</span>
+              <span class="value"><strong>${data.items.length}</strong></span>
+            </div>
+            <div class="gudang-stat">
+              <span class="label">Total Stok Tersedia</span>
+              <span class="value"><strong>${data.totalStock.toLocaleString('id-ID')}</strong> pcs</span>
+            </div>
+            <div class="gudang-stat">
+              <span class="label">Jumlah Supplier</span>
+              <span class="value"><strong>${data.suppliers.size}</strong></span>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  container.innerHTML = html;
+  feather.replace();
+}
+
+function renderGudangItemTable() {
+  const tbody = document.getElementById('tabelGudangItem');
+  if (!tbody) return;
+
+  // Sort by warehouse then by name for better grouping
+  const sortedData = [...dataBarang].sort((a, b) => {
+    const gudangA = a.gudang || 'zzzz'; // put no-gudang at the end
+    const gudangB = b.gudang || 'zzzz';
+    if (gudangA < gudangB) return -1;
+    if (gudangA > gudangB) return 1;
+    // if warehouses are same, sort by name
+    return a.nama.localeCompare(b.nama);
+  });
+
+  if (sortedData.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" class="empty-table">Tidak ada data barang</td></tr>`;
+  } else {
+    let html = '';
+    sortedData.forEach((item, index) => {
+      html += `
+        <tr>
+          <td style="text-align: center;">${index + 1}</td>
+          <td>${item.nama}</td>
+          <td>${splitKode(item.kode).map(k => `<span class="badge">${k}</span>`).join(' ')}</td>
+          <td>${item.gudang || 'N/A'}</td>
+          <td class="text-right">${item.datang.toLocaleString('id-ID')}</td>
+        </tr>
+      `;
+    });
+    tbody.innerHTML = html;
+  }
+}
+
+// ================================================================
+//  GUDANG - FORM TAMBAH GUDANG
+// ================================================================
+if (toggleAddWarehouseFormBtn) {
+  toggleAddWarehouseFormBtn.addEventListener('click', () => {
+    const isVisible = addWarehouseFormContainer.classList.contains('is-visible');
+    smoothToggle(addWarehouseFormContainer, !isVisible);
+    smoothToggle(moveWarehouseFormContainer, false);
+    moveWarehouseForm.reset();
+    if (!isVisible) {
+      feather.replace();
+    }
+  });
+}
+
+if (cancelAddWarehouseBtn) {
+  cancelAddWarehouseBtn.addEventListener('click', () => {
+    smoothToggle(addWarehouseFormContainer, false);
+    addWarehouseForm.reset();
+  });
+}
+
+if (addWarehouseForm) {
+  addWarehouseForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const newWarehouseNameInput = document.getElementById('newWarehouseName');
+    const gudangName = newWarehouseNameInput.value.trim().toUpperCase();
+
+    if (!gudangName) {
+      return alert('Nama Gudang harus diisi.');
+    }
+
+    if (gudangList.includes(gudangName)) {
+      newWarehouseNameInput.focus();
+      return alert(`Gudang dengan nama "${gudangName}" sudah ada.`);
+    }
+
+    gudangList.push(gudangName);
+    gudangList.sort();
+
+    renderGudang();
+    saveAllData();
+    alert(`Gudang "${gudangName}" berhasil ditambahkan.`);
+
+    addWarehouseForm.reset();
+    smoothToggle(addWarehouseFormContainer, false);
+  });
+}
+
+// ================================================================
+//  GUDANG - PINDAH GUDANG
+// ================================================================
+if (toggleMoveWarehouseFormBtn) {
+  toggleMoveWarehouseFormBtn.addEventListener('click', () => {
+    const isMoveFormVisible = moveWarehouseFormContainer.classList.contains('is-visible');
+
+    // Pastikan form tambah gudang tertutup saat form pindah gudang dibuka
+    smoothToggle(addWarehouseFormContainer, false);
+    addWarehouseForm.reset();
+
+    // Toggle form pindah gudang
+    smoothToggle(moveWarehouseFormContainer, !isMoveFormVisible);
+    if (!isMoveFormVisible) {
+      renderMoveWarehouseForm(); // Isi dropdown saat form dibuka
+      feather.replace();
+    }
+  });
+}
+
+if (cancelMoveWarehouseBtn) {
+  cancelMoveWarehouseBtn.addEventListener('click', () => {
+    smoothToggle(moveWarehouseFormContainer, false);
+    moveWarehouseForm.reset();
+  });
+}
+
+function renderMoveWarehouseForm() {
+  // Populate itemToMoveSelect
+  itemToMoveSelect.innerHTML = '<option value="">-- Pilih Barang --</option>';
+  // Filter out items with 0 stock, as they cannot be moved.
+  dataBarang.filter(item => item.datang > 0).forEach(item => {
+    const option = document.createElement('option');
+    option.value = item._idx;
+    option.textContent = `${item.nama} (${item.kode}) - Gudang: ${item.gudang} - Stok: ${item.datang.toLocaleString('id-ID')}`;
+    itemToMoveSelect.appendChild(option);
+  });
+
+  // Populate destinationWarehouseSelect
+  destinationWarehouseSelect.innerHTML = '<option value="">-- Pilih Gudang --</option>';
+  const allGudangNames = new Set([...gudangList, ...dataBarang.map(item => item.gudang).filter(Boolean)]);
+  Array.from(allGudangNames).sort().forEach(gudangName => {
+    const option = document.createElement('option');
+    option.value = gudangName;
+    option.textContent = gudangName;
+    destinationWarehouseSelect.appendChild(option);
+  });
+
+  // Reset quantity input
+  quantityToMoveInput.disabled = true;
+  quantityToMoveInput.value = '';
+  availableStockInfo.textContent = '';
+}
+
+if (moveWarehouseForm) {
+  moveWarehouseForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const selectedItemIdx = parseInt(itemToMoveSelect.value);
+    const destinationGudang = destinationWarehouseSelect.value;
+    const quantityToMove = parseInt(quantityToMoveInput.value);
+
+    if (isNaN(selectedItemIdx)) {
+      return alert('Pilih barang yang akan dipindahkan.');
+    }
+    if (!destinationGudang) {
+      return alert('Pilih gudang tujuan.');
+    }
+
+    if (isNaN(quantityToMove) || quantityToMove <= 0) {
+      return alert('Jumlah yang akan dipindahkan harus lebih dari 0.');
+    }
+
+    const sourceItem = dataBarang.find(i => i._idx === selectedItemIdx);
+
+    if (!sourceItem) {
+      return alert('Barang tidak ditemukan.');
+    }
+
+    if (sourceItem.gudang === destinationGudang) {
+      return alert(`Barang sudah berada di gudang "${destinationGudang}".`);
+    }
+
+    if (quantityToMove > sourceItem.datang) {
+      return alert(`Jumlah pindah (${quantityToMove}) tidak boleh melebihi stok tersedia (${sourceItem.datang}).`);
+    }
+
+    // --- CORE LOGIC ---
+    // Case 1: Moving the entire stock. We can just change the warehouse.
+    if (quantityToMove === sourceItem.datang) {
+      sourceItem.gudang = destinationGudang;
+    }
+    // Case 2: Partial move.
+    else {
+      // Find if a matching item already exists in the destination warehouse
+      let destinationItem = dataBarang.find(item =>
+        item.nama === sourceItem.nama &&
+        item.kode === sourceItem.kode && // Check for more attributes for a better match
+        item.supplier === sourceItem.supplier &&
+        item.gudang === destinationGudang
+      );
+
+      if (destinationItem) {
+        // If it exists, just add the stock
+        destinationItem.datang += quantityToMove;
+      } else {
+        // If not, create a new item entry
+        const newItem = { ...sourceItem }; // Create a shallow copy
+        newItem.gudang = destinationGudang;
+        newItem.datang = quantityToMove;
+        // Reset history for the new item entry
+        newItem.pesananHistory = [];
+        newItem.kirimanHistory = [{ kirimanKe: 1, jumlah: quantityToMove, tanggal: new Date().toISOString().split('T')[0] }];
+        newItem.kiriman = 1;
+        // Assign a new unique index
+        newItem._idx = Math.max(...dataBarang.map(item => item._idx)) + 1;
+
+        dataBarang.push(newItem);
+      }
+      // Reduce stock from the source item
+      sourceItem.datang -= quantityToMove;
+    }
+
+    alert(`Sebanyak ${quantityToMove.toLocaleString('id-ID')} pcs barang "${sourceItem.nama}" berhasil dipindahkan ke gudang "${destinationGudang}".`);
+    moveWarehouseForm.reset();
+    smoothToggle(moveWarehouseFormContainer, false);
+    renderAll();
+    saveAllData();
+    // Also re-render the move form dropdowns in case they are opened again
+    renderMoveWarehouseForm();
+  });
+}
+
+// ================================================================
+//  MODAL TAMBAH PESANAN
+// ================================================================
+const addOrderModal = document.getElementById('addOrderModal');
+const modalItemName = document.getElementById('modalItemName');
+const newOrderQtyInput = document.getElementById('newOrderQty');
+const newOrderDateInput = document.getElementById('newOrderDate');
+const saveOrderBtn = document.getElementById('saveOrderBtn');
+const cancelOrderBtn = document.getElementById('cancelOrderBtn');
+
+// Buka modal dari tabel Data Barang
+tbody.addEventListener('click', function (event) {
+  if (event.target.classList.contains('btn-add-order')) {
+    const idx = parseInt(event.target.dataset.idx);
+    const item = dataBarang[idx];
+
+    addOrderModal.dataset.idx = idx;
+    modalItemName.textContent = item.nama;
+    newOrderDateInput.value = new Date().toISOString().split('T')[0]; // Set ke hari ini
+    newOrderQtyInput.value = 1; // Reset ke 1
+
+    addOrderModal.classList.add('is-visible');
+    newOrderQtyInput.focus();
+  }
+
+  // Tampilkan/sembunyikan riwayat pesanan
+  if (event.target.classList.contains('btn-show-history')) {
+    const button = event.target;
+    const idx = parseInt(button.dataset.idx);
+    const parentRow = document.getElementById(`item-row-${idx}`);
+    const existingHistoryRow = document.getElementById(`history-row-${idx}`);
+
+    if (existingHistoryRow) {
+      existingHistoryRow.remove();
+      button.textContent = 'Lihat';
+    } else {
+      const item = dataBarang[idx];
+      const historyHtml = item.pesananHistory.length > 0
+        ? `<ul class="history-list">
+            ${item.pesananHistory.map(order => `
+              <li>
+                <span class="date">Pesanan pada ${reverseDateFormat(order.tanggal)}</span>
+                <span class="qty">${order.jumlah.toLocaleString('id-ID')} pcs</span>
+              </li>
+            `).join('')}
+          </ul>`
+        : '<span>Tidak ada riwayat pesanan tambahan.</span>';
+
+      const historyRow = document.createElement('tr');
+      historyRow.id = `history-row-${idx}`;
+      historyRow.className = 'history-row';
+      historyRow.innerHTML = `<td colspan="13">${historyHtml}</td>`;
+      parentRow.after(historyRow);
+      button.textContent = 'Tutup';
+    }
+  }
+});
+
+// Tutup modal
+function closeModal() {
+  addOrderModal.classList.remove('is-visible');
+}
+cancelOrderBtn.addEventListener('click', closeModal);
+addOrderModal.addEventListener('click', function (event) {
+  if (event.target === addOrderModal) { // Klik di luar area konten modal
+    closeModal();
+  }
+});
+
+// Simpan pesanan baru
+saveOrderBtn.addEventListener('click', function () {
+  const idx = parseInt(addOrderModal.dataset.idx);
+  const newQty = parseInt(newOrderQtyInput.value);
+  const newDate = newOrderDateInput.value;
+
+  if (isNaN(newQty) || newQty <= 0) {
+    return alert('Jumlah pesanan harus lebih dari 0.');
+  }
+  if (!newDate) {
+    return alert('Tanggal pesanan harus diisi.');
+  }
+
+  dataBarang[idx].pesananHistory.push({ jumlah: newQty, tanggal: newDate });
+
+  closeModal();
+  renderAll();
+  saveAllData();
+});
+
+// Handle Enter key press in modal
+addOrderModal.addEventListener('keydown', function (event) {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    saveOrderBtn.click();
+  }
+});
+
+function exportGudangCsv() {
+  const headers = ['#', 'Nama Barang', 'Kode', 'Gudang', 'Stok Tersedia'];
+  const sorted = dataBarang.slice().sort((a, b) => {
+    const gudangA = a.gudang || 'zzzz';
+    const gudangB = b.gudang || 'zzzz';
+    if (gudangA < gudangB) return -1;
+    if (gudangA > gudangB) return 1;
+    return a.nama.localeCompare(b.nama);
+  });
+  const rows = sorted.map((item, index) => [
+    index + 1,
+    item.nama,
+    item.kode,
+    item.gudang || 'N/A',
+    item.datang
+  ]);
+  exportTableToCsv('gudang_barang.csv', headers, rows);
+}
+
