@@ -366,12 +366,15 @@ body.hp-body {
 }
 
 .hp-body .item-card-keluar .item-qty-input {
-  width: 100%;
+  width: 80px;
   height: 28px;
   font-size: 12px;
   padding: 0 4px;
   flex-shrink: 0;
   min-width: 0;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .hp-body .set-all-qty-input {
