@@ -19,12 +19,21 @@ menuList.addEventListener('click', function (event) {
 
   // Handle Delete All button
   if (clickedItem.id === 'deleteAllBtn') {
-    const confirmation = confirm('PERINGATAN: Anda akan menghapus SEMUA data barang dan riwayat kiriman. Aksi ini tidak dapat dibatalkan.\n\nApakah Anda yakin ingin melanjutkan?');
+    const confirmation = confirm('PERINGATAN: Anda akan menghapus SEMUA data barang, riwayat barang keluar, gudang, dan transaksi keuangan. Aksi ini tidak dapat dibatalkan.\n\nApakah Anda yakin ingin melanjutkan?');
     if (confirmation) {
       dataBarang = []; // Hapus semua data
+      dataBarangKeluar = [];
+      gudangList = [];
+      if (typeof dataKeuangan !== 'undefined') dataKeuangan = [];
+      nextBarangKeluarId = 1;
+      if (typeof nextKeuanganId !== 'undefined') nextKeuanganId = 1;
       filterKode = '__semua'; // Reset filter
       populateFilter();
       renderAll();
+      renderRiwayatBarangKeluar();
+      renderRiwayatBarangKeluarHP();
+      if (typeof renderRiwayatPemasukan === 'function') renderRiwayatPemasukan();
+      if (typeof renderRiwayatPengeluaran === 'function') renderRiwayatPengeluaran();
       saveAllData();
       alert('Semua data telah berhasil dihapus.');
     }
