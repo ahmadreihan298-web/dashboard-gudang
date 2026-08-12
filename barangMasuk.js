@@ -7,6 +7,12 @@ const totalKurang = document.getElementById('totalKurang');
 const infoMasuk = document.getElementById('infoMasuk');
 const filterStatus = document.getElementById('filterStatus');
 const jumlahStatus = document.getElementById('jumlahStatus');
+const sortMasukSupplier = document.getElementById('sortMasukSupplier');
+const arrowMasukSupplier = document.getElementById('arrowMasukSupplier');
+const sortMasukKode = document.getElementById('sortMasukKode');
+const arrowMasukKode = document.getElementById('arrowMasukKode');
+let sortMasukKey = 'supplier';
+let sortMasukAsc = true;
 
 function renderBarangMasuk() {
   const statusFilter = filterStatus.value; // 'semua', 'belum', 'lunas'
@@ -20,6 +26,24 @@ function renderBarangMasuk() {
     filtered = semua.filter(item => getTotalPesan(item) > item.datang);
   } else if (statusFilter === 'lunas') {
     filtered = semua.filter(item => getTotalPesan(item) === item.datang);
+  }
+
+  filtered = [...filtered].sort((a, b) => {
+    const valueA = String(a[sortMasukKey] || '');
+    const valueB = String(b[sortMasukKey] || '');
+    const result = valueA.localeCompare(valueB, 'id', { sensitivity: 'base', numeric: true });
+    return sortMasukAsc ? result : -result;
+  });
+
+  [arrowMasukSupplier, arrowMasukKode].forEach(arrow => {
+    if (!arrow) return;
+    arrow.textContent = '↕';
+    arrow.classList.remove('active');
+  });
+  const activeArrow = sortMasukKey === 'kode' ? arrowMasukKode : arrowMasukSupplier;
+  if (activeArrow) {
+    activeArrow.textContent = sortMasukAsc ? '↑' : '↓';
+    activeArrow.classList.add('active');
   }
 
   // Hitung statistik (hanya untuk yang belum lunas)
@@ -77,8 +101,33 @@ function renderBarangMasuk() {
   // Update statistik
   totalAktif.textContent = belumLunas.length;
   totalKurang.textContent = totalKurangValue.toLocaleString('id-ID');
-  infoMasuk.textContent = `Menampilkan ${filtered.length} item (${statusFilter === 'semua' ? 'Semua' : statusFilter === 'belum' ? 'Belum Lunas' : 'Lunas'})`;
+  const sortLabel = sortMasukKey === 'kode' ? 'Kode' : 'Supplier';
+  infoMasuk.textContent = `Menampilkan ${filtered.length} item (${statusFilter === 'semua' ? 'Semua' : statusFilter === 'belum' ? 'Belum Lunas' : 'Lunas'}) - ${sortLabel} ${sortMasukAsc ? 'A-Z' : 'Z-A'}`;
   feather.replace(); // Render new icons
+}
+
+if (sortMasukSupplier) {
+  sortMasukSupplier.addEventListener('click', function () {
+    if (sortMasukKey === 'supplier') {
+      sortMasukAsc = !sortMasukAsc;
+    } else {
+      sortMasukKey = 'supplier';
+      sortMasukAsc = true;
+    }
+    renderBarangMasuk();
+  });
+}
+
+if (sortMasukKode) {
+  sortMasukKode.addEventListener('click', function () {
+    if (sortMasukKey === 'kode') {
+      sortMasukAsc = !sortMasukAsc;
+    } else {
+      sortMasukKey = 'kode';
+      sortMasukAsc = true;
+    }
+    renderBarangMasuk();
+  });
 }
 
 // Event filter status

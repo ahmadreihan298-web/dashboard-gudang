@@ -1094,7 +1094,6 @@ tfoot td {
 /* Kembalikan Nama, Supplier, & Riwayat Kiriman ke kiri */
 #page-barangMasuk th:nth-child(3),
 #page-barangMasuk td:nth-child(3),
-#page-barangMasuk th:nth-child(4),
 #page-barangMasuk td:nth-child(4),
 #page-barangMasuk th:nth-child(7),
 #page-barangMasuk td:nth-child(7) {
@@ -1224,6 +1223,14 @@ tfoot td {
   margin-bottom: 24px;
   overflow-x: auto;
   padding-bottom: 0;
+}
+
+/* Keep Barang Keluar code tabs tall enough for the active button's padding. */
+#barangKeluarCodeTabs {
+  height: auto;
+  min-height: 26px;
+  align-items: center;
+  overflow: visible;
 }
 
 .finance-tab-btn,
@@ -1507,6 +1514,11 @@ body.dark-mode select {
   background: var(--bg-surface);
   border-color: var(--border-color);
   color: var(--text-main);
+}
+
+/* Makes the browser-provided calendar icon readable on dark date fields. */
+body.dark-mode input[type="date"] {
+  color-scheme: dark;
 }
 
 body.dark-mode .search-input:focus,
