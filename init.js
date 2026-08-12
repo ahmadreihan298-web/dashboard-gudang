@@ -37,7 +37,7 @@ function refreshAppViews() {
 }
 
 function initApp() {
-  // Data lokal langsung ditampilkan; Sheets disinkronkan di background.
+  // Data lokal langsung ditampilkan; Firebase disinkronkan di background.
   loadAllData();
   refreshAppViews();
 

@@ -1,13 +1,38 @@
 // ================================================================
-//  PERSISTENSI — Google Sheets via Apps Script (+ fallback localStorage)
+//  PERSISTENSI â€” Google Sheets via Apps Script (+ fallback localStorage)
 // ================================================================
 const STORAGE_KEY = 'gdg_saved_data_v1';
+const CLEAN_RESET_MARKER = 'gdg_clean_reset_v1';
+
+function clearOldDataOnce() {
+  if (localStorage.getItem(CLEAN_RESET_MARKER)) return;
+
+  localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem('gdg_saved_data');
+  localStorage.setItem(CLEAN_RESET_MARKER, 'done');
+}
 
 // GANTI dengan URL hasil Deploy Apps Script kamu (akhiran /exec)
-// Contoh: https://script.google.com/macros/s/AKfycb.../exec
-const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbw8WwiMIdqXPrCYbyS11fGea_HYLKMNbh33x-77vSH32Yrnni0JhPIsEptd6t9ouDgOiA/exec';
+let firebaseDb = null;
+let firebaseReady = false;
 
-// Cadangan otomatis: kalau URL belum diisi, aplikasi tetap jalan di localStorage
+function setupFirebase() {
+  const config = typeof FIREBASE_CONFIG !== 'undefined' ? FIREBASE_CONFIG : null;
+  if (!config || !config.apiKey || !config.projectId || !config.appId || typeof firebase === 'undefined') return;
+
+  try {
+    if (!firebase.apps.length) firebase.initializeApp(config);
+    firebaseDb = firebase.firestore();
+    firebaseReady = true;
+    firebaseDb.enablePersistence({ synchronizeTabs: true }).catch((e) => {
+      console.warn('Cache Firebase persistent tidak aktif:', e.code || e.message);
+    });
+  } catch (e) {
+    console.warn('Firebase belum siap, memakai cache lokal:', e);
+  }
+}
+
+setupFirebase();
 
 function applySavedState(saved) {
   if (Array.isArray(saved.dataBarang)) dataBarang = saved.dataBarang;
@@ -54,29 +79,41 @@ function saveToLocalStorage() {
 
 async function loadAllData() {
   // Tampilkan cache lokal secepatnya; jangan menunggu jaringan.
+  clearOldDataOnce();
   loadFromLocalStorage();
 
-  try {
-    const res = await fetch(SHEET_API_URL);
-    const text = await res.text();
-    if (!text) return; // Sel A1 masih kosong → pakai data default
-    applySavedState(JSON.parse(text));
-    saveToLocalStorage();
-    if (typeof refreshAppViews === 'function') refreshAppViews();
-  } catch (e) {
-    console.warn('Google Sheets tidak tersedia, memakai cache lokal:', e);
-  }
-}
+  if (firebaseReady) {
+    try {
+      const snapshot = await firebaseDb.doc(FIREBASE_DATA_PATH).get();
+      if (snapshot.exists) {
+        applySavedState(snapshot.data());
+        saveToLocalStorage();
+        if (typeof refreshAppViews === 'function') refreshAppViews();
+        return;
+      }
 
+      // Kirim cache lokal ke Firebase saat dokumen masih kosong.
+      if (localStorage.getItem(STORAGE_KEY)) {
+        await firebaseDb.doc(FIREBASE_DATA_PATH).set(buildState(), { merge: false });
+        return;
+      }
+    } catch (e) {
+      console.warn('Firebase tidak tersedia, memakai cache lokal:', e);
+    }
+  }
+
+  if (typeof refreshAppViews === 'function') refreshAppViews();
+}
 async function saveAllData() {
   saveToLocalStorage(); // Backup instan ke localStorage
 
-  try {
-    await fetch(SHEET_API_URL, {
-      method: 'POST',
-      body: JSON.stringify(buildState())
-    });
-  } catch (e) {
-    console.error('Gagal menyimpan ke Google Sheets (data aman di localStorage):', e);
+  if (firebaseReady) {
+    try {
+      await firebaseDb.doc(FIREBASE_DATA_PATH).set(buildState(), { merge: false });
+      return;
+    } catch (e) {
+      console.error('Gagal menyimpan ke Firebase, data tetap aman di cache lokal:', e);
+    }
   }
+
 }
