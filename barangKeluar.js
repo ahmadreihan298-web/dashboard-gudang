@@ -133,9 +133,6 @@ if (barangKeluarTabContentContainer) {
       const qtyInput = card.querySelector('.item-qty-input');
       if (qtyInput) {
         qtyInput.disabled = !isSelected;
-        if (isSelected) {
-          qtyInput.focus();
-        }
       }
 
       const subPanel = card.closest('.item-sub-panel');
