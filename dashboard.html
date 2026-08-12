@@ -12,6 +12,20 @@
 
   <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
+    <!-- Branding -->
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke-linejoin="round" stroke-linecap="round"/>
+          <polyline points="9 22 9 12 15 12 15 22" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="sidebar-brand-text">
+        <span class="sidebar-brand-name">Dashboard Stock</span>
+        <span class="sidebar-brand-sub">Kitab</span>
+      </div>
+    </div>
+    <div class="sidebar-divider"></div>
     <button class="toggle-btn" id="toggleBtn" aria-label="Menu">
       <span class="hamburger">
         <span></span>
@@ -70,13 +84,13 @@
       <!-- Quick Actions -->
       <h2 class="section-title" style="margin-top: 24px;"><i data-feather="zap"></i> Akses Cepat</h2>
       <div class="quick-actions-grid">
-        <button class="quick-action-btn" id="quick-action-pindah"><i data-feather="shuffle"></i><span>Pindah
+        <button class="quick-action-btn" id="quick-action-pindah"><div class="icon-wrap"><i data-feather="shuffle"></i></div><span>Pindah
             Barang</span></button>
-        <button class="quick-action-btn" id="quick-action-tambah-gudang"><i data-feather="plus-square"></i><span>Tambah
+        <button class="quick-action-btn" id="quick-action-tambah-gudang"><div class="icon-wrap"><i data-feather="plus-square"></i></div><span>Tambah
             Gudang</span></button>
-        <button class="quick-action-btn" id="quick-action-upload"><i data-feather="upload"></i><span>Upload
+        <button class="quick-action-btn" id="quick-action-upload"><div class="icon-wrap"><i data-feather="upload"></i></div><span>Upload
             CSV</span></button>
-        <button class="quick-action-btn" id="quick-action-barang-masuk"><i data-feather="inbox"></i><span>Proses Barang
+        <button class="quick-action-btn" id="quick-action-barang-masuk"><div class="icon-wrap"><i data-feather="inbox"></i></div><span>Proses Barang
             Masuk</span></button>
       </div>
 

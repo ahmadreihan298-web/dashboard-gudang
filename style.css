@@ -4,10 +4,43 @@
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
+  /* === PRIMARY (Biru — Beranda & Global) === */
   --primary: #2563eb;
   --primary-hover: #1d4ed8;
   --primary-soft: #eff6ff;
+  --primary-border: #bfdbfe;
 
+  /* === MASUK (Hijau Emerald) === */
+  --color-masuk: #059669;
+  --color-masuk-hover: #047857;
+  --color-masuk-soft: #d1fae5;
+  --color-masuk-border: #6ee7b7;
+
+  /* === KELUAR (Oranye Amber) === */
+  --color-keluar: #d97706;
+  --color-keluar-hover: #b45309;
+  --color-keluar-soft: #fef3c7;
+  --color-keluar-border: #fcd34d;
+
+  /* === KEUANGAN (Ungu Violet) === */
+  --color-keuangan: #7c3aed;
+  --color-keuangan-hover: #6d28d9;
+  --color-keuangan-soft: #ede9fe;
+  --color-keuangan-border: #c4b5fd;
+
+  /* === GUDANG (Teal Cyan) === */
+  --color-gudang: #0891b2;
+  --color-gudang-hover: #0e7490;
+  --color-gudang-soft: #cffafe;
+  --color-gudang-border: #67e8f9;
+
+  /* === DATA BARANG (Indigo) === */
+  --color-data: #4f46e5;
+  --color-data-hover: #4338ca;
+  --color-data-soft: #e0e7ff;
+  --color-data-border: #a5b4fc;
+
+  /* === BACKGROUND & SURFACE === */
   --bg-body: #f8fafc;
   --bg-surface: #ffffff;
   --text-main: #0f172a;
@@ -15,6 +48,7 @@
   --text-light: #94a3b8;
   --border-color: #e2e8f0;
 
+  /* === STATUS COLORS === */
   --success: #16a34a;
   --success-bg: #dcfce7;
   --warning: #d97706;
@@ -22,10 +56,12 @@
   --danger: #dc2626;
   --danger-bg: #fee2e2;
 
+  /* === RADIUS === */
   --radius-sm: 8px;
   --radius-md: 10px;
   --radius-lg: 14px;
 
+  /* === SHADOW === */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
@@ -78,6 +114,77 @@ body {
 /* ================================================================
    2. SIDEBAR (RAPI & LAPANG)
    ================================================================ */
+
+/* --- Sidebar Brand Header --- */
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 20px 0;
+  margin-bottom: 4px;
+  overflow: hidden;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.sidebar-brand-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--color-keuangan) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 3px 10px rgb(37 99 235 / 0.3);
+}
+
+.sidebar-brand-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke: #fff;
+  stroke-width: 2.5;
+  fill: none;
+}
+
+.sidebar-brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar-brand-name {
+  font-family: 'Fraunces', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.sidebar-brand-sub {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-light);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.sidebar.collapsed .sidebar-brand-text {
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  overflow: hidden;
+}
+
+.sidebar-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 14px 20px 10px;
+  flex-shrink: 0;
+}
+
 .sidebar {
   width: 260px;
   background: var(--bg-surface);
@@ -189,6 +296,43 @@ body {
   font-weight: 600;
 }
 
+/* Warna sidebar aktif per halaman */
+.menu-item[data-page="home"].active {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+.menu-item[data-page="home"].active .icon svg { stroke: var(--primary); }
+
+.menu-item[data-page="dataBarang"].active {
+  background: var(--color-data-soft);
+  color: var(--color-data);
+}
+.menu-item[data-page="dataBarang"].active .icon svg { stroke: var(--color-data); }
+
+.menu-item[data-page="barangMasuk"].active {
+  background: var(--color-masuk-soft);
+  color: var(--color-masuk);
+}
+.menu-item[data-page="barangMasuk"].active .icon svg { stroke: var(--color-masuk); }
+
+.menu-item[data-page="barangKeluar"].active {
+  background: var(--color-keluar-soft);
+  color: var(--color-keluar);
+}
+.menu-item[data-page="barangKeluar"].active .icon svg { stroke: var(--color-keluar); }
+
+.menu-item[data-page="keuangan"].active {
+  background: var(--color-keuangan-soft);
+  color: var(--color-keuangan);
+}
+.menu-item[data-page="keuangan"].active .icon svg { stroke: var(--color-keuangan); }
+
+.menu-item[data-page="gudang"].active {
+  background: var(--color-gudang-soft);
+  color: var(--color-gudang);
+}
+.menu-item[data-page="gudang"].active .icon svg { stroke: var(--color-gudang); }
+
 .sidebar.collapsed .menu-item span:not(.icon) {
   display: none;
 }
@@ -249,6 +393,7 @@ body {
   margin-bottom: 4px;
 }
 
+/* Default icon H1 & section-title (biru) */
 .header-section h1 i,
 #page-dataBarang h1 i,
 .section-title i {
@@ -275,6 +420,91 @@ body {
   padding-bottom: 12px;
   border-bottom: 1px solid var(--border-color);
   color: var(--text-main);
+}
+
+/* ---- Warna H1 icon & section-title per halaman ---- */
+
+/* Halaman Utama (Home) — Biru */
+#page-home h1 i,
+#page-home .header-section h1 i {
+  color: var(--primary);
+}
+#page-home .section-title {
+  border-bottom-color: var(--primary-border);
+  color: var(--text-main);
+}
+#page-home .section-title i {
+  color: var(--primary);
+}
+
+/* Data Barang — Indigo */
+#page-dataBarang h1 {
+  color: var(--color-data);
+}
+#page-dataBarang h1 i {
+  color: var(--color-data);
+}
+#page-dataBarang .section-title {
+  border-bottom-color: var(--color-data-border);
+}
+#page-dataBarang .section-title i {
+  color: var(--color-data);
+}
+
+/* Barang Masuk — Hijau Emerald */
+#page-barangMasuk .header-section h1 {
+  color: var(--color-masuk);
+}
+#page-barangMasuk .header-section h1 i {
+  color: var(--color-masuk);
+}
+#page-barangMasuk .section-title {
+  border-bottom-color: var(--color-masuk-border);
+}
+#page-barangMasuk .section-title i {
+  color: var(--color-masuk);
+}
+
+/* Barang Keluar — Oranye Amber */
+#page-barangKeluar .header-section h1 {
+  color: var(--color-keluar);
+}
+#page-barangKeluar .header-section h1 i {
+  color: var(--color-keluar);
+}
+#page-barangKeluar .section-title {
+  border-bottom-color: var(--color-keluar-border);
+}
+#page-barangKeluar .section-title i {
+  color: var(--color-keluar);
+}
+
+/* Keuangan — Ungu Violet */
+#page-keuangan .header-section h1 {
+  color: var(--color-keuangan);
+}
+#page-keuangan .header-section h1 i {
+  color: var(--color-keuangan);
+}
+#page-keuangan .section-title {
+  border-bottom-color: var(--color-keuangan-border);
+}
+#page-keuangan .section-title i {
+  color: var(--color-keuangan);
+}
+
+/* Gudang — Teal */
+#page-gudang .header-section h1 {
+  color: var(--color-gudang);
+}
+#page-gudang .header-section h1 i {
+  color: var(--color-gudang);
+}
+#page-gudang .section-title {
+  border-bottom-color: var(--color-gudang-border);
+}
+#page-gudang .section-title i {
+  color: var(--color-gudang);
 }
 
 /* ================================================================
@@ -338,7 +568,7 @@ body {
 
 .quick-action-btn {
   background: var(--bg-surface);
-  border: 1px solid var(--border-color);
+  border: 1.5px solid var(--border-color);
   border-radius: var(--radius-lg);
   padding: 24px;
   font-weight: 600;
@@ -349,22 +579,96 @@ body {
   align-items: center;
   gap: 12px;
   cursor: pointer;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease, background 0.2s ease;
   box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+}
+
+.quick-action-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.quick-action-btn:hover::before {
+  opacity: 1;
+}
+
+.quick-action-btn .icon-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.quick-action-btn:hover .icon-wrap {
+  transform: scale(1.08);
 }
 
 .quick-action-btn i {
-  color: var(--primary);
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   stroke-width: 2px;
 }
 
 .quick-action-btn:hover {
-  border-color: var(--primary);
   box-shadow: var(--shadow-md);
-  color: var(--primary);
+  transform: translateY(-2px);
 }
+
+/* Pindah Barang — Teal */
+#quick-action-pindah .icon-wrap {
+  background: var(--color-gudang-soft);
+  color: var(--color-gudang);
+}
+#quick-action-pindah:hover {
+  border-color: var(--color-gudang-border);
+  color: var(--color-gudang);
+}
+#quick-action-pindah::before { background: var(--color-gudang); }
+
+/* Tambah Gudang — Indigo */
+#quick-action-tambah-gudang .icon-wrap {
+  background: var(--color-data-soft);
+  color: var(--color-data);
+}
+#quick-action-tambah-gudang:hover {
+  border-color: var(--color-data-border);
+  color: var(--color-data);
+}
+#quick-action-tambah-gudang::before { background: var(--color-data); }
+
+/* Upload CSV — Amber/Oranye */
+#quick-action-upload .icon-wrap {
+  background: var(--color-keluar-soft);
+  color: var(--color-keluar);
+}
+#quick-action-upload:hover {
+  border-color: var(--color-keluar-border);
+  color: var(--color-keluar);
+}
+#quick-action-upload::before { background: var(--color-keluar); }
+
+/* Proses Barang Masuk — Hijau */
+#quick-action-barang-masuk .icon-wrap {
+  background: var(--color-masuk-soft);
+  color: var(--color-masuk);
+}
+#quick-action-barang-masuk:hover {
+  border-color: var(--color-masuk-border);
+  color: var(--color-masuk);
+}
+#quick-action-barang-masuk::before { background: var(--color-masuk); }
 
 /* Gudang Cards */
 .gudang-container {
@@ -397,14 +701,15 @@ body {
 }
 
 .gudang-card-header .icon {
-  background: var(--primary-soft);
-  color: var(--primary);
+  background: var(--color-gudang-soft);
+  color: var(--color-gudang);
   width: 44px;
   height: 44px;
   border-radius: var(--radius-md);
   display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: 0 3px 8px rgb(8 145 178 / 0.18);
 }
 
 .gudang-card-header h3 {
@@ -553,9 +858,9 @@ body {
   gap: 12px;
   margin-bottom: 32px;
   padding: 16px 20px;
-  background: var(--bg-surface);
-  border: 1px solid var(--primary);
-  border-left: 4px solid var(--primary);
+  background: var(--color-keluar-soft);
+  border: 1px solid var(--color-keluar-border);
+  border-left: 4px solid var(--color-keluar);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
 }
@@ -566,13 +871,14 @@ body {
   gap: 8px;
   font-size: 13px;
   font-weight: 600;
-  color: var(--text-muted);
+  color: var(--color-keluar-hover);
 }
 
 .total-harga-value {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--primary);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--color-keluar);
+  letter-spacing: -0.02em;
 }
 
 .form-grid {
@@ -627,6 +933,62 @@ body {
   transform: scale(0.98);
 }
 
+/* btn-proses per halaman konteks */
+#page-barangMasuk .btn-proses {
+  background: var(--color-masuk);
+}
+#page-barangMasuk .btn-proses:hover {
+  background: var(--color-masuk-hover);
+}
+
+#page-barangKeluar .btn-proses {
+  background: var(--color-keluar);
+}
+#page-barangKeluar .btn-proses:hover {
+  background: var(--color-keluar-hover);
+}
+
+#page-keuangan .btn-proses {
+  background: var(--color-keuangan);
+}
+#page-keuangan .btn-proses:hover {
+  background: var(--color-keuangan-hover);
+}
+
+#page-gudang .btn-proses {
+  background: var(--color-gudang);
+}
+#page-gudang .btn-proses:hover {
+  background: var(--color-gudang-hover);
+}
+
+/* btn-export hover per halaman konteks */
+#page-barangMasuk .btn-export:hover {
+  border-color: var(--color-masuk-border);
+  background: var(--color-masuk-soft);
+  color: var(--color-masuk);
+}
+#page-barangKeluar .btn-export:hover {
+  border-color: var(--color-keluar-border);
+  background: var(--color-keluar-soft);
+  color: var(--color-keluar);
+}
+#page-keuangan .btn-export:hover {
+  border-color: var(--color-keuangan-border);
+  background: var(--color-keuangan-soft);
+  color: var(--color-keuangan);
+}
+#page-gudang .btn-export:hover {
+  border-color: var(--color-gudang-border);
+  background: var(--color-gudang-soft);
+  color: var(--color-gudang);
+}
+#page-dataBarang .btn-export:hover {
+  border-color: var(--color-data-border);
+  background: var(--color-data-soft);
+  color: var(--color-data);
+}
+
 /* Baris header tabel + tombol export */
 .table-head-bar {
   display: flex;
@@ -666,11 +1028,11 @@ body {
 }
 
 .btn-add-order {
-  background: var(--success);
+  background: var(--color-masuk);
 }
 
 .btn-add-order:hover {
-  background: #047857;
+  background: var(--color-masuk-hover);
 }
 
 .btn-undo,
@@ -762,9 +1124,10 @@ body {
   width: 52px;
   height: 52px;
   border-radius: var(--radius-md);
-  background: var(--primary-soft);
-  color: var(--primary);
+  background: linear-gradient(135deg, var(--color-masuk-soft), var(--color-masuk-soft));
+  color: var(--color-masuk);
   flex-shrink: 0;
+  box-shadow: 0 4px 12px rgb(5 150 105 / 0.18);
 }
 
 .home-stat-icon i {
@@ -787,7 +1150,8 @@ body {
 .home-stat-value {
   font-size: 22px;
   font-weight: 700;
-  color: #16a34a;
+  color: var(--color-masuk);
+  letter-spacing: -0.02em;
 }
 
 .home-live-card {
@@ -799,8 +1163,8 @@ body {
   padding: 18px 22px;
   color: #fff;
   border-radius: var(--radius-lg);
-  background: var(--primary);
-  box-shadow: var(--shadow-md);
+  background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+  box-shadow: 0 4px 20px rgb(37 99 235 / 0.35);
   position: relative;
   overflow: hidden;
 }
@@ -980,15 +1344,42 @@ table {
 }
 
 thead th {
-  background: #f1f5f9;
-  color: var(--text-main);
-  font-weight: 600;
+  background: #f8fafc;
+  color: var(--text-muted);
+  font-weight: 700;
   padding: 16px 20px;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 2px solid var(--border-color);
   white-space: nowrap;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-size: 11px;
+  letter-spacing: 0.07em;
+  font-size: 10.5px;
+}
+
+/* Warna header tabel per halaman */
+#page-barangMasuk thead th {
+  border-bottom-color: var(--color-masuk-border);
+  color: var(--color-masuk);
+  text-align: center;
+}
+
+#page-barangKeluar thead th {
+  border-bottom-color: var(--color-keluar-border);
+  color: var(--color-keluar);
+}
+
+#page-keuangan thead th {
+  border-bottom-color: var(--color-keuangan-border);
+  color: var(--color-keuangan);
+}
+
+#page-gudang thead th {
+  border-bottom-color: var(--color-gudang-border);
+  color: var(--color-gudang);
+}
+
+#page-dataBarang thead th {
+  border-bottom-color: var(--color-data-border);
+  color: var(--color-data);
 }
 
 th.sortable {
@@ -1052,8 +1443,28 @@ tr:last-child td {
 }
 
 tr:hover td {
-  background: #f8fafc;
-  transition: background 0.2s ease;
+  background: #f0f9ff;
+  transition: background 0.15s ease;
+}
+
+#page-barangMasuk tr:not(.row-lunas):hover td {
+  background: rgba(5, 150, 105, 0.05);
+}
+
+#page-barangKeluar tr:hover td {
+  background: rgba(217, 119, 6, 0.05);
+}
+
+#page-keuangan tr:hover td {
+  background: rgba(124, 58, 237, 0.05);
+}
+
+#page-gudang tr:hover td {
+  background: rgba(8, 145, 178, 0.05);
+}
+
+#page-dataBarang tr:hover td {
+  background: rgba(79, 70, 229, 0.05);
 }
 
 tfoot td {
@@ -1085,19 +1496,38 @@ tfoot td {
 }
 
 /* --- 2. BARANG MASUK TABLE (FIX PRESISI TENGAH) --- */
-/* Paksa semua kolom rata tengah */
-#page-barangMasuk th,
+/* Semua header (th) rata tengah */
+#page-barangMasuk th {
+  text-align: center !important;
+}
+
+/* Header mengikuti arah isi kolom agar judul terlihat lebih rapi. */
+#page-barangMasuk thead th:nth-child(3),
+#page-barangMasuk thead th:nth-child(4),
+#page-barangMasuk thead th:nth-child(7) {
+  text-align: left !important;
+}
+
+#page-barangMasuk thead th {
+  padding-left: 20px;
+  padding-right: 20px;
+  letter-spacing: 0.04em;
+}
+
+/* Semua data (td) rata tengah */
 #page-barangMasuk td {
   text-align: center !important;
 }
 
-/* Kembalikan Nama, Supplier, & Riwayat Kiriman ke kiri */
-#page-barangMasuk th:nth-child(3),
+/* Kembalikan hanya td (isi data) Nama & Riwayat Kiriman ke kiri — BUKAN th */
 #page-barangMasuk td:nth-child(3),
 #page-barangMasuk td:nth-child(4),
-#page-barangMasuk th:nth-child(7),
 #page-barangMasuk td:nth-child(7) {
   text-align: left !important;
+}
+
+#page-barangMasuk th:nth-child(7) {
+  text-indent: 20px;
 }
 
 /* Memastikan elemen Status/Badge rata tengah */
@@ -1111,6 +1541,11 @@ tfoot td {
 #page-barangMasuk td input {
   margin: 0 auto;
   display: block;
+}
+
+/* Ikuti layout otomatis Data Barang, dengan ruang minimum untuk semua kolom. */
+#page-barangMasuk .table-wrapper table {
+  min-width: 1900px;
 }
 
 /* Posisi tombol aksi presisi tengah */
@@ -1489,9 +1924,22 @@ body.dark-mode {
   --border-color: #334155;
 
   --primary-soft: #1e3a5f;
+  --primary-border: #1e3a5f;
   --success-bg: #064e3b;
   --warning-bg: #78350f;
   --danger-bg: #7f1d1d;
+
+  /* Dark mode contextual colors */
+  --color-masuk-soft: #064e3b;
+  --color-masuk-border: #065f46;
+  --color-keluar-soft: #78350f;
+  --color-keluar-border: #92400e;
+  --color-keuangan-soft: #3b0764;
+  --color-keuangan-border: #4c1d95;
+  --color-gudang-soft: #0c4a6e;
+  --color-gudang-border: #075985;
+  --color-data-soft: #1e1b4b;
+  --color-data-border: #312e81;
 }
 
 body.dark-mode thead th {
@@ -1855,4 +2303,68 @@ input:checked+.slider:before {
   .section-title {
     font-size: 14px;
   }
+}
+
+/* ================================================================
+   12. CUSTOM SCROLLBAR
+   ================================================================ */
+
+/* Main content area scrollbar */
+.main::-webkit-scrollbar,
+.menu-list::-webkit-scrollbar,
+.table-wrapper::-webkit-scrollbar,
+.modal-content::-webkit-scrollbar,
+.item-tab-content::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.main::-webkit-scrollbar-track,
+.menu-list::-webkit-scrollbar-track,
+.table-wrapper::-webkit-scrollbar-track,
+.modal-content::-webkit-scrollbar-track,
+.item-tab-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.main::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--primary) 0%, var(--color-keuangan) 100%);
+  border-radius: 99px;
+}
+
+.menu-list::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 99px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 99px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: var(--text-light);
+}
+
+.modal-content::-webkit-scrollbar-thumb,
+.item-tab-content::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 99px;
+}
+
+/* Per halaman scrollbar accent */
+#page-barangMasuk .table-wrapper::-webkit-scrollbar-thumb { background: var(--color-masuk-border); }
+#page-barangKeluar .table-wrapper::-webkit-scrollbar-thumb { background: var(--color-keluar-border); }
+#page-keuangan .table-wrapper::-webkit-scrollbar-thumb { background: var(--color-keuangan-border); }
+#page-gudang .table-wrapper::-webkit-scrollbar-thumb { background: var(--color-gudang-border); }
+#page-dataBarang .table-wrapper::-webkit-scrollbar-thumb { background: var(--color-data-border); }
+
+/* Dark mode scrollbar */
+body.dark-mode .main::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #3b82f6 0%, #7c3aed 100%);
+}
+
+body.dark-mode .table-wrapper::-webkit-scrollbar-thumb,
+body.dark-mode .menu-list::-webkit-scrollbar-thumb {
+  background: #334155;
 }
