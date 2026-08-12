@@ -1,7 +1,8 @@
 ﻿// ================================================================
 //  DATA BARANG
 // ================================================================
-let sortSupplierAsc = true;
+let sortKey = 'supplier';
+let sortAsc = true;
 let filterKode = '__semua';
 
 const filterSelect = document.getElementById('filterKode');
@@ -20,8 +21,18 @@ function populateFilter() {
 const tbody = document.getElementById('tabelBody');
 const totalDataSpan = document.getElementById('totalData');
 const arrowSupplier = document.getElementById('arrowSupplier');
+const arrowTanggal = document.getElementById('arrowTanggal');
+const arrowKode = document.getElementById('arrowKode');
 const sortStatus = document.getElementById('sortStatus');
 const jumlahFilter = document.getElementById('jumlahFilter');
+
+const SORT_LABELS = { supplier: 'Supplier', tanggal: 'Tanggal', kode: 'Kode' };
+
+function getSortValue(item, key) {
+  if (key === 'tanggal') return item.tanggal || '';
+  if (key === 'kode') return (item.kode || '').toUpperCase();
+  return (item.supplier || '').toUpperCase();
+}
 
 function renderDataBarang() {
   let filtered = dataBarang;
@@ -30,15 +41,23 @@ function renderDataBarang() {
   }
   const sorted = [...filtered];
   sorted.sort((a, b) => {
-    const nameA = a.supplier.toUpperCase();
-    const nameB = b.supplier.toUpperCase();
-    if (nameA < nameB) return sortSupplierAsc ? -1 : 1;
-    if (nameA > nameB) return sortSupplierAsc ? 1 : -1;
+    const va = getSortValue(a, sortKey);
+    const vb = getSortValue(b, sortKey);
+    if (va < vb) return sortAsc ? -1 : 1;
+    if (va > vb) return sortAsc ? 1 : -1;
     return 0;
   });
-  arrowSupplier.textContent = sortSupplierAsc ? '↑' : '↓';
-  arrowSupplier.className = 'arrow active';
-  sortStatus.textContent = `Supplier ${sortSupplierAsc ? 'A–Z' : 'Z–A'}`;
+
+  // Indicator panah: hanya kolom aktif yang menampilkan arah urutan
+  [arrowSupplier, arrowTanggal, arrowKode].forEach(arrow => {
+    arrow.textContent = '↕';
+    arrow.classList.remove('active');
+  });
+  const activeArrow = sortKey === 'supplier' ? arrowSupplier : sortKey === 'tanggal' ? arrowTanggal : arrowKode;
+  activeArrow.textContent = sortAsc ? '↑' : '↓';
+  activeArrow.classList.add('active');
+
+  sortStatus.textContent = `${SORT_LABELS[sortKey]} ${sortAsc ? 'A–Z' : 'Z–A'}`;
 
   if (sorted.length === 0) {
     tbody.innerHTML = `<tr><td colspan="14" class="empty-table">Tidak ada data</td></tr>`;
@@ -77,9 +96,24 @@ function renderDataBarang() {
   feather.replace(); // Render new icons if any
 }
 
-document.getElementById('sortSupplier').addEventListener('click', function () {
-  sortSupplierAsc = !sortSupplierAsc;
+function setSort(key) {
+  if (sortKey === key) {
+    sortAsc = !sortAsc;
+  } else {
+    sortKey = key;
+    sortAsc = true;
+  }
   renderDataBarang();
+}
+
+document.getElementById('sortSupplier').addEventListener('click', function () {
+  setSort('supplier');
+});
+document.getElementById('sortTanggal').addEventListener('click', function () {
+  setSort('tanggal');
+});
+document.getElementById('sortKode').addEventListener('click', function () {
+  setSort('kode');
 });
 filterSelect.addEventListener('change', function () {
   filterKode = this.value;

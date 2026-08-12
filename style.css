@@ -107,7 +107,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 16px 16px 24px;
+  margin: 16px 12px 24px;
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease;
   box-shadow: var(--shadow-sm);
@@ -996,6 +996,16 @@ th.sortable {
   transition: color 0.25s ease;
 }
 
+th.sortable .arrow {
+  font-size: 11px;
+  color: var(--text-light);
+}
+
+th.sortable .arrow.active {
+  color: var(--primary);
+  font-weight: 700;
+}
+
 th.sortable:hover {
   color: var(--text-main);
 }
@@ -1511,6 +1521,46 @@ body.dark-mode .row-lunas td {
 
 body.dark-mode .item-tab-content {
   background: var(--bg-surface);
+}
+
+/* Tab pills — kontras tinggi di mode gelap (aktif: biru solid + teks putih) */
+body.dark-mode .item-code-tab-btn,
+body.dark-mode .item-sub-tab-btn {
+  border-radius: 8px;
+}
+
+body.dark-mode .item-code-tab-btn.active,
+body.dark-mode .item-sub-tab-btn.active {
+  background: #2563eb !important;
+  color: #ffffff !important;
+  border-color: #2563eb !important;
+}
+
+body.dark-mode .item-code-tab-btn:not(.active),
+body.dark-mode .item-sub-tab-btn:not(.active) {
+  background: #1e293b !important;
+  color: #94a3b8 !important;
+  border-color: #334155 !important;
+}
+
+body.dark-mode .item-code-tab-btn:not(.active):hover,
+body.dark-mode .item-sub-tab-btn:not(.active):hover {
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+/* Sidebar hover — gunakan overlay transparan halus agar teks tetap terbaca */
+body.dark-mode .menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .menu-item:hover span {
+  color: #ffffff !important;
+}
+
+body.dark-mode .menu-item:hover .icon svg {
+  stroke: #ffffff !important;
 }
 
 /* Theme Switcher Toggle */
