@@ -350,12 +350,14 @@ body.hp-body {
 /* Header kartu: nama di baris sendiri, qty di bawah (tidak saling desak) */
 .hp-body .item-card-keluar-header {
   flex-direction: column;
-  align-items: stretch;
+  align-items: center;
   gap: 4px;
   min-width: 0;
 }
 
 .hp-body .item-card-keluar .item-name {
+  display: block;
+  text-align: center;
   font-size: 10px;
   white-space: nowrap;
   overflow: hidden;

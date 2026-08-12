@@ -53,14 +53,18 @@ function saveToLocalStorage() {
 }
 
 async function loadAllData() {
+  // Tampilkan cache lokal secepatnya; jangan menunggu jaringan.
+  loadFromLocalStorage();
+
   try {
     const res = await fetch(SHEET_API_URL);
     const text = await res.text();
     if (!text) return; // Sel A1 masih kosong → pakai data default
     applySavedState(JSON.parse(text));
+    saveToLocalStorage();
+    if (typeof refreshAppViews === 'function') refreshAppViews();
   } catch (e) {
-    console.error('Gagal memuat dari Google Sheets, pakai localStorage:', e);
-    loadFromLocalStorage();
+    console.warn('Google Sheets tidak tersedia, memakai cache lokal:', e);
   }
 }
 

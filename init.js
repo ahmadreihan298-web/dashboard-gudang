@@ -26,8 +26,7 @@ setupSearch('searchGudangItem', 'tabelGudangItem');
 // ================================================================
 //  INIT
 // ================================================================
-async function initApp() {
-  await loadAllData(); // Muat data dari Google Sheets (atau localStorage jika offline)
+function refreshAppViews() {
   populateFilter();
   renderDataBarang();
   renderBarangMasuk();
@@ -35,6 +34,12 @@ async function initApp() {
   renderGudangItemTable();
   populateBarangKeluarForm(); // Panggil agar form terisi saat pertama kali load
   renderHomePage();
+}
+
+function initApp() {
+  // Data lokal langsung ditampilkan; Sheets disinkronkan di background.
+  loadAllData();
+  refreshAppViews();
 
   // Mobile: default tampilkan halaman Barang Keluar (satu-satunya menu di HP)
   if (window.innerWidth <= 768) {
