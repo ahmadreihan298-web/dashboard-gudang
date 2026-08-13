@@ -23,6 +23,34 @@ const totalDataSpan = document.getElementById('totalData');
 const arrowSupplier = document.getElementById('arrowSupplier');
 const arrowTanggal = document.getElementById('arrowTanggal');
 const arrowKode = document.getElementById('arrowKode');
+
+// Navigasi geser tabel Data Barang
+(function setupDataTableScroll() {
+  const wrapper = document.querySelector('#page-dataBarang .table-wrapper');
+  const btnLeft = document.getElementById('scrollDataLeft');
+  const btnRight = document.getElementById('scrollDataRight');
+  if (!wrapper || !btnLeft || !btnRight) return;
+
+  const scrollByAmount = () => wrapper.clientWidth * 0.8;
+
+  function updateNavState() {
+    const maxLeft = wrapper.scrollWidth - wrapper.clientWidth;
+    btnLeft.disabled = wrapper.scrollLeft <= 1;
+    btnRight.disabled = wrapper.scrollLeft >= maxLeft - 1;
+  }
+
+  btnLeft.addEventListener('click', () => {
+    wrapper.scrollBy({ left: -scrollByAmount(), behavior: 'smooth' });
+  });
+
+  btnRight.addEventListener('click', () => {
+    wrapper.scrollBy({ left: scrollByAmount(), behavior: 'smooth' });
+  });
+
+  wrapper.addEventListener('scroll', updateNavState);
+  window.addEventListener('resize', updateNavState);
+  updateNavState();
+})();
 const sortStatus = document.getElementById('sortStatus');
 const jumlahFilter = document.getElementById('jumlahFilter');
 

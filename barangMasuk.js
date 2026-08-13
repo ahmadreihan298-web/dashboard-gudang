@@ -142,24 +142,32 @@ document.getElementById('refreshBtn').addEventListener('click', function () {
 // Navigasi geser tabel Barang Masuk (panah kiri/kanan)
 (function setupTableScroll() {
   const wrapper = document.getElementById('tableWrapperMasuk');
-  const btnLeft = document.getElementById('scrollMasukLeft');
-  const btnRight = document.getElementById('scrollMasukRight');
-  if (!wrapper || !btnLeft || !btnRight) return;
+  const btnLeftBottom = document.getElementById('scrollMasukLeft');
+  const btnRightBottom = document.getElementById('scrollMasukRight');
+  const btnLeftTop = document.getElementById('scrollMasukLeftTop');
+  const btnRightTop = document.getElementById('scrollMasukRightTop');
+  if (!wrapper) return;
 
   const scrollByAmount = () => wrapper.clientWidth * 0.8;
+  const leftButtons = [btnLeftBottom, btnLeftTop].filter(Boolean);
+  const rightButtons = [btnRightBottom, btnRightTop].filter(Boolean);
 
   function updateNavState() {
     const maxLeft = wrapper.scrollWidth - wrapper.clientWidth;
-    btnLeft.disabled = wrapper.scrollLeft <= 1;
-    btnRight.disabled = wrapper.scrollLeft >= maxLeft - 1;
+    leftButtons.forEach(btn => btn.disabled = wrapper.scrollLeft <= 1);
+    rightButtons.forEach(btn => btn.disabled = wrapper.scrollLeft >= maxLeft - 1);
   }
 
-  btnLeft.addEventListener('click', () => {
-    wrapper.scrollBy({ left: -scrollByAmount(), behavior: 'smooth' });
+  leftButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      wrapper.scrollBy({ left: -scrollByAmount(), behavior: 'smooth' });
+    });
   });
 
-  btnRight.addEventListener('click', () => {
-    wrapper.scrollBy({ left: scrollByAmount(), behavior: 'smooth' });
+  rightButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      wrapper.scrollBy({ left: scrollByAmount(), behavior: 'smooth' });
+    });
   });
 
   wrapper.addEventListener('scroll', updateNavState);

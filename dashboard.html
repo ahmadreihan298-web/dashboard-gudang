@@ -164,6 +164,10 @@
           <tbody id="tabelBody"></tbody>
         </table>
       </div>
+      <div class="table-scroll-nav">
+        <button type="button" class="scroll-nav-btn" id="scrollDataLeft" title="Geser kiri"><i data-feather="chevron-left"></i></button>
+        <button type="button" class="scroll-nav-btn" id="scrollDataRight" title="Geser kanan"><i data-feather="chevron-right"></i></button>
+      </div>
     </div>
 
     <!-- BARANG MASUK -->
@@ -172,7 +176,7 @@
         <div>
           <h1><i data-feather="inbox"></i> Barang Masuk</h1>
         </div>
-        <button class="btn-proses" id="refreshBtn" style="background:#64748b;"><i data-feather="refresh-cw"></i>
+        <button class="btn-proses btn-neutral" id="refreshBtn"><i data-feather="refresh-cw"></i>
           Refresh</button>
       </div>
 
@@ -219,6 +223,11 @@
         <button type="button" class="btn-export" onclick="exportBarangMasukCsv()"><i data-feather="download"></i> Export CSV</button>
       </div>
 
+      <div class="table-scroll-nav">
+        <button type="button" class="scroll-nav-btn" id="scrollMasukLeftTop" title="Geser kiri"><i data-feather="chevron-left"></i></button>
+        <button type="button" class="scroll-nav-btn" id="scrollMasukRightTop" title="Geser kanan"><i data-feather="chevron-right"></i></button>
+      </div>
+
       <div class="table-wrapper" id="tableWrapperMasuk">
         <table>
           <thead>
@@ -244,7 +253,6 @@
       </div>
       <div class="table-scroll-nav">
         <button type="button" class="scroll-nav-btn" id="scrollMasukLeft" title="Geser kiri"><i data-feather="chevron-left"></i></button>
-        <span class="scroll-nav-hint">Geser tabel untuk melihat kolom lainnya</span>
         <button type="button" class="scroll-nav-btn" id="scrollMasukRight" title="Geser kanan"><i data-feather="chevron-right"></i></button>
       </div>
     </div>
@@ -370,7 +378,7 @@
                 </div>
               </div>
               <div class="form-actions">
-                <button type="submit" class="btn-proses" style="background-color: #f43f5e;"><i data-feather="save"></i>
+                <button type="submit" class="btn-proses btn-danger"><i data-feather="save"></i>
                   Simpan Pengeluaran</button>
               </div>
             </form>
@@ -444,7 +452,7 @@
           <h1><i data-feather="archive"></i> Gudang</h1>
           <p class="subtitle" style="margin-bottom: 0;">Ringkasan dan manajemen gudang.</p>
         </div>
-        <button class="btn-proses" id="toggleAddWarehouseFormBtn" style="background:#10b981; margin-left: auto;"><i
+        <button class="btn-proses btn-success" id="toggleAddWarehouseFormBtn" style="margin-left: auto;"><i
             data-feather="plus"></i> Tambah Gudang Baru</button>
       </div>
 
@@ -459,8 +467,7 @@
             </div>
           </div>
           <div class="form-actions">
-            <button type="button" id="cancelAddWarehouseBtn" class="btn-undo"
-              style="background-color: #64748b;">Batal</button>
+            <button type="button" id="cancelAddWarehouseBtn" class="btn-undo btn-neutral">Batal</button>
             <button type="submit" class="btn-proses">Simpan Gudang</button>
           </div>
         </form>
@@ -492,8 +499,7 @@
             </div>
           </div>
           <div class="form-actions">
-            <button type="button" id="cancelMoveWarehouseBtn" class="btn-undo"
-              style="background-color: #64748b;">Batal</button>
+            <button type="button" id="cancelMoveWarehouseBtn" class="btn-undo btn-neutral">Batal</button>
             <button type="submit" class="btn-proses">Pindahkan Barang</button>
           </div>
         </form>
@@ -502,7 +508,7 @@
       <div class="header-section" style="margin-top: 20px;">
         <h2 class="section-title" style="margin-top: 0; margin-bottom: 0; border-bottom: none;"><i
             data-feather="truck"></i> Pindah Gudang</h2>
-        <button class="btn-proses" id="toggleMoveWarehouseFormBtn" style="background:#f59e0b;"><i
+        <button class="btn-proses btn-warning" id="toggleMoveWarehouseFormBtn"><i
             data-feather="shuffle"></i> Pindah Barang</button>
       </div>
       <p class="subtitle" style="margin-bottom: 20px; margin-top: 5px;">Pindahkan barang dari satu gudang ke gudang
@@ -557,7 +563,7 @@
         <input type="date" id="newOrderDate">
       </div>
       <div class="modal-actions">
-        <button id="cancelOrderBtn" class="btn-undo" style="background-color: #64748b;">Batal</button>
+        <button id="cancelOrderBtn" class="btn-undo btn-neutral">Batal</button>
         <button id="saveOrderBtn" class="btn-proses">Simpan Pesanan</button>
       </div>
     </div>
@@ -570,7 +576,7 @@
        <p id="editHistoryItemName"></p>
        <div id="editHistoryList" style="max-height: 300px; overflow-y: auto; margin-bottom: 16px;"></div>
        <div class="modal-actions">
-         <button id="cancelEditHistoryBtn" class="btn-undo" style="background-color: #64748b;">Batal</button>
+         <button id="cancelEditHistoryBtn" class="btn-undo btn-neutral">Batal</button>
          <button id="saveEditHistoryBtn" class="btn-proses">Simpan Perubahan</button>
        </div>
      </div>
@@ -606,7 +612,7 @@
           <div id="editOrderHistoryList" style="max-height: 200px; overflow-y: auto;"></div>
         </div>
         <div class="modal-actions">
-         <button id="cancelEditItemBtn" class="btn-undo" style="background-color: #64748b;">Batal</button>
+         <button id="cancelEditItemBtn" class="btn-undo btn-neutral">Batal</button>
          <button id="saveEditItemBtn" class="btn-proses">Simpan Perubahan</button>
        </div>
      </div>
