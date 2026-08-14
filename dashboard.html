@@ -46,6 +46,8 @@
             data-feather="dollar-sign"></i></span><span>Keuangan</span></li>
       <li class="menu-item" data-page="gudang"><span class="icon"><i
             data-feather="archive"></i></span><span>Gudang</span></li>
+      <li class="menu-item" data-page="kirimPutri"><span class="icon"><i
+            data-feather="send"></i></span><span>Kirim ke Putri</span></li>
       <li class="menu-item" id="theme-switcher">
         <span class="icon"><i data-feather="moon"></i></span>
         <span>Mode Gelap</span>
@@ -480,21 +482,17 @@
           <div class="form-grid" style="grid-template-columns: 1fr;">
             <div class="form-group">
               <label for="itemToMove">Pilih Barang untuk Dipindahkan</label>
-              <select id="itemToMove" required>
+              <select id="itemToMove" style="display: none;">
                 <option value="">-- Pilih Barang --</option>
               </select>
+              <div id="custom-cart-container"></div>
             </div>
-            <div class="form-grid" style="grid-template-columns: 2fr 1fr; align-items: start;">
+            <div class="form-grid" style="grid-template-columns: 1fr; align-items: start;">
               <div class="form-group">
                 <label for="destinationWarehouse">Pilih Gudang Tujuan</label>
                 <select id="destinationWarehouse" required>
                   <option value="">-- Pilih Gudang --</option>
                 </select>
-              </div>
-              <div class="form-group">
-                <label for="quantityToMove">Jumlah Pindah</label>
-                <input type="number" id="quantityToMove" min="1" required disabled>
-                <small id="availableStockInfo" style="margin-top: 5px; color: var(--text-light);"></small>
               </div>
             </div>
           </div>
@@ -544,6 +542,56 @@
       <h2 class="section-title"><i data-feather="bar-chart-2"></i> Ringkasan Gudang</h2>
       <div id="gudang-summary-container" class="gudang-container">
         <!-- Cards will be injected here by JavaScript -->
+      </div>
+    </div>
+
+    <div class="page" id="page-kirimPutri">
+      <div class="header-section">
+        <div>
+          <h1><i data-feather="send"></i> Kirim ke Putri</h1>
+          <p class="subtitle" style="margin-bottom: 0;">Kelola pengiriman barang ke Putri.</p>
+        </div>
+      </div>
+
+      <div class="form-container">
+        <form id="kirimPutriForm" class="input-form">
+          <div id="kirimPutriCart"></div>
+          <div class="kirim-putri-summary">
+            <div class="kirim-putri-total">
+              <span>Total Nominal:</span>
+              <span id="kirimPutriTotal">Rp 0</span>
+            </div>
+            <button type="submit" class="btn-proses btn-warning" id="kirimPutriSubmitBtn">
+              <i data-feather="send"></i> Kirim ke Putri
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="table-head-bar" style="margin-top: 32px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+        <h2 class="section-title" style="margin-bottom: 0;"><i data-feather="list"></i> Riwayat Kirim ke Putri</h2>
+        <button type="button" class="btn-proses" id="exportKirimPutriCsvBtn" style="display: inline-flex; align-items: center; gap: 8px;">
+          <i data-feather="download"></i> Export CSV
+        </button>
+      </div>
+      <div class="form-container">
+        <div class="table-wrapper" style="max-height: none;">
+          <table class="data-table" id="kirimPutriHistoryTable">
+            <thead>
+              <tr>
+                <th style="width: 40px;">No</th>
+                <th>Tanggal</th>
+                <th>Nama Barang</th>
+                <th>Kode</th>
+                <th style="text-align: right;">Qty</th>
+                <th style="text-align: right;">Harga Jual</th>
+                <th style="text-align: right;">Subtotal</th>
+                <th style="text-align: right;">Total</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -630,6 +678,7 @@
   <script src="gudang.js"></script>
   <script src="barangKeluar.js"></script>
   <script src="keuangan.js"></script>
+  <script src="kirimPutri.js"></script>
   <script src="init.js"></script>
   <script>
     feather.replace();

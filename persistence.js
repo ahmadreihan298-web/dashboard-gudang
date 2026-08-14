@@ -43,6 +43,8 @@ function applySavedState(saved) {
     if (Array.isArray(saved.dataKeuangan)) dataKeuangan = saved.dataKeuangan;
     if (typeof saved.nextKeuanganId === 'number') nextKeuanganId = saved.nextKeuanganId;
   }
+  if (Array.isArray(saved.kirimPutriHistory)) kirimPutriHistory = saved.kirimPutriHistory;
+  if (typeof saved.nextKpId === 'number') nextKpId = saved.nextKpId;
 }
 
 function buildState() {
@@ -50,7 +52,9 @@ function buildState() {
     dataBarang: dataBarang,
     gudangList: gudangList,
     dataBarangKeluar: dataBarangKeluar,
-    nextBarangKeluarId: nextBarangKeluarId
+    nextBarangKeluarId: nextBarangKeluarId,
+    kirimPutriHistory: kirimPutriHistory,
+    nextKpId: nextKpId
   };
   if (typeof dataKeuangan !== 'undefined') {
     state.dataKeuangan = dataKeuangan;

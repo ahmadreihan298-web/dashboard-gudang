@@ -82,6 +82,9 @@ menuList.addEventListener('click', function (event) {
       renderRiwayatPengeluaran();
       feather.replace();
     }
+    if (clickedItem.dataset.page === 'kirimPutri') {
+      if (typeof initKirimPutri === 'function') initKirimPutri();
+    }
   }
 });
 

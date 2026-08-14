@@ -5,6 +5,10 @@
 let dataKeuangan = [];
 let nextKeuanganId = 1;
 
+// Data storage for Kirim ke Putri
+let kirimPutriHistory = [];
+let nextKpId = 1;
+
 const financePage = document.getElementById('page-keuangan');
 const formPemasukan = document.getElementById('formPemasukan');
 const tabelRiwayatPemasukan = document.getElementById('tabelRiwayatPemasukan');

@@ -10,29 +10,8 @@ const moveWarehouseFormContainer = document.getElementById('move-warehouse-form-
 const moveWarehouseForm = document.getElementById('moveWarehouseForm');
 const itemToMoveSelect = document.getElementById('itemToMove');
 const destinationWarehouseSelect = document.getElementById('destinationWarehouse');
-const quantityToMoveInput = document.getElementById('quantityToMove');
-const availableStockInfo = document.getElementById('availableStockInfo');
 const cancelMoveWarehouseBtn = document.getElementById('cancelMoveWarehouseBtn');
 const toggleMoveWarehouseFormBtn = document.getElementById('toggleMoveWarehouseFormBtn');
-
-// Event listener for item selection to update quantity input
-itemToMoveSelect.addEventListener('change', function () {
-  const selectedItemIdx = parseInt(this.value);
-  if (isNaN(selectedItemIdx)) {
-    quantityToMoveInput.disabled = true;
-    quantityToMoveInput.value = '';
-    availableStockInfo.textContent = '';
-    return;
-  }
-
-  const item = dataBarang.find(i => i._idx === selectedItemIdx);
-  if (item) {
-    quantityToMoveInput.disabled = false;
-    quantityToMoveInput.max = item.datang;
-    quantityToMoveInput.value = 1; // Default to 1
-    availableStockInfo.textContent = `Stok tersedia: ${item.datang.toLocaleString('id-ID')}`;
-  }
-});
 
 function renderGudang() {
   const container = document.getElementById('gudang-summary-container');
@@ -70,11 +49,15 @@ function renderGudang() {
   } else {
     gudangKeys.forEach(gudang => {
       const data = gudangData[gudang] || { items: [], suppliers: new Set(), totalStock: 0 };
+      const isInMasterList = gudangList.includes(gudang);
+      const canDelete = isInMasterList && data.items.length === 0;
+
       html += `
         <div class="gudang-card">
           <div class="gudang-card-header">
             <div class="icon"><i data-feather="archive"></i></div>
             <h3>Gudang ${gudang}</h3>
+            ${canDelete ? `<button type="button" class="btn-delete-warehouse" data-gudang="${gudang}" title="Hapus Gudang"><i data-feather="trash-2"></i></button>` : ''}
           </div>
           <div class="gudang-stats">
             <div class="gudang-stat">
@@ -97,6 +80,27 @@ function renderGudang() {
 
   container.innerHTML = html;
   feather.replace();
+
+  // Attach delete handlers
+  container.querySelectorAll('.btn-delete-warehouse').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const gudang = btn.dataset.gudang;
+      if (!gudang) return;
+
+      if (!confirm(`Hapus gudang "${gudang}" dari daftar master?`)) return;
+
+      const idx = gudangList.indexOf(gudang);
+      if (idx > -1) {
+        gudangList.splice(idx, 1);
+      }
+
+      renderGudang();
+      renderGudangItemTable();
+      renderMoveWarehouseForm();
+      saveAllData();
+    });
+  });
 }
 
 function renderGudangItemTable() {
@@ -208,16 +212,66 @@ if (cancelMoveWarehouseBtn) {
   });
 }
 
+function renderMoveWarehouseCart() {
+  const container = document.getElementById('custom-cart-container');
+  if (!container) return;
+
+  container.innerHTML = '';
+
+  const availableItems = dataBarang.filter(item => item.datang > 0);
+
+  if (availableItems.length === 0) {
+    container.innerHTML = '<div class="cart-empty">Tidak ada barang dengan stok.</div>';
+    return;
+  }
+
+  availableItems.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'cart-item';
+    row.dataset.idx = item._idx;
+
+    row.innerHTML = `
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.nama}</div>
+        <div class="cart-item-details">Kode: ${item.kode} | Gudang: ${item.gudang || 'N/A'} | Stok: ${item.datang.toLocaleString('id-ID')}</div>
+      </div>
+      <input type="number" class="cart-item-qty" min="1" max="${item.datang}" value="1">
+      <button type="button" class="cart-item-btn">Pilih</button>
+    `;
+
+    row.addEventListener('click', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+      selectMoveWarehouseItem(item._idx, row);
+    });
+
+    row.querySelector('.cart-item-btn').addEventListener('click', () => {
+      selectMoveWarehouseItem(item._idx, row);
+    });
+
+    container.appendChild(row);
+  });
+}
+
+function selectMoveWarehouseItem(idx, row) {
+  const isSelected = row.classList.contains('selected');
+  if (isSelected) {
+    row.classList.remove('selected');
+  } else {
+    row.classList.add('selected');
+  }
+}
+
 function renderMoveWarehouseForm() {
-  // Populate itemToMoveSelect
+  // Populate itemToMoveSelect (keep for form submission compatibility)
   itemToMoveSelect.innerHTML = '<option value="">-- Pilih Barang --</option>';
-  // Filter out items with 0 stock, as they cannot be moved.
   dataBarang.filter(item => item.datang > 0).forEach(item => {
     const option = document.createElement('option');
     option.value = item._idx;
     option.textContent = `${item.nama} (${item.kode}) - Gudang: ${item.gudang} - Stok: ${item.datang.toLocaleString('id-ID')}`;
     itemToMoveSelect.appendChild(option);
   });
+
+  renderMoveWarehouseCart();
 
   // Populate destinationWarehouseSelect
   destinationWarehouseSelect.innerHTML = '<option value="">-- Pilih Gudang --</option>';
@@ -228,88 +282,92 @@ function renderMoveWarehouseForm() {
     option.textContent = gudangName;
     destinationWarehouseSelect.appendChild(option);
   });
-
-  // Reset quantity input
-  quantityToMoveInput.disabled = true;
-  quantityToMoveInput.value = '';
-  availableStockInfo.textContent = '';
 }
 
 if (moveWarehouseForm) {
   moveWarehouseForm.addEventListener('submit', (event) => {
     event.preventDefault();
 
-    const selectedItemIdx = parseInt(itemToMoveSelect.value);
     const destinationGudang = destinationWarehouseSelect.value;
-    const quantityToMove = parseInt(quantityToMoveInput.value);
 
-    if (isNaN(selectedItemIdx)) {
-      return alert('Pilih barang yang akan dipindahkan.');
-    }
     if (!destinationGudang) {
       return alert('Pilih gudang tujuan.');
     }
 
-    if (isNaN(quantityToMove) || quantityToMove <= 0) {
-      return alert('Jumlah yang akan dipindahkan harus lebih dari 0.');
+    const container = document.getElementById('custom-cart-container');
+    const selectedRows = container ? container.querySelectorAll('.cart-item.selected') : [];
+
+    if (selectedRows.length === 0) {
+      return alert('Pilih minimal satu barang untuk dipindahkan.');
     }
 
-    const sourceItem = dataBarang.find(i => i._idx === selectedItemIdx);
+    const itemsToProcess = [];
+    let hasError = false;
 
-    if (!sourceItem) {
-      return alert('Barang tidak ditemukan.');
-    }
+    selectedRows.forEach(row => {
+      const idx = parseInt(row.dataset.idx);
+      const qtyInput = row.querySelector('.cart-item-qty');
+      const quantityToMove = parseInt(qtyInput.value);
+      const sourceItem = dataBarang.find(i => i._idx === idx);
 
-    if (sourceItem.gudang === destinationGudang) {
-      return alert(`Barang sudah berada di gudang "${destinationGudang}".`);
-    }
+      if (!sourceItem) return;
 
-    if (quantityToMove > sourceItem.datang) {
-      return alert(`Jumlah pindah (${quantityToMove}) tidak boleh melebihi stok tersedia (${sourceItem.datang}).`);
-    }
-
-    // --- CORE LOGIC ---
-    // Case 1: Moving the entire stock. We can just change the warehouse.
-    if (quantityToMove === sourceItem.datang) {
-      sourceItem.gudang = destinationGudang;
-    }
-    // Case 2: Partial move.
-    else {
-      // Find if a matching item already exists in the destination warehouse
-      let destinationItem = dataBarang.find(item =>
-        item.nama === sourceItem.nama &&
-        item.kode === sourceItem.kode && // Check for more attributes for a better match
-        item.supplier === sourceItem.supplier &&
-        item.gudang === destinationGudang
-      );
-
-      if (destinationItem) {
-        // If it exists, just add the stock
-        destinationItem.datang += quantityToMove;
-      } else {
-        // If not, create a new item entry
-        const newItem = { ...sourceItem }; // Create a shallow copy
-        newItem.gudang = destinationGudang;
-        newItem.datang = quantityToMove;
-        // Reset history for the new item entry
-        newItem.pesananHistory = [];
-        newItem.kirimanHistory = [{ kirimanKe: 1, jumlah: quantityToMove, tanggal: new Date().toISOString().split('T')[0] }];
-        newItem.kiriman = 1;
-        // Assign a new unique index
-        newItem._idx = Math.max(...dataBarang.map(item => item._idx)) + 1;
-
-        dataBarang.push(newItem);
+      if (isNaN(quantityToMove) || quantityToMove <= 0) {
+        alert(`Jumlah pindah untuk "${sourceItem.nama}" harus lebih dari 0.`);
+        hasError = true;
+        return;
       }
-      // Reduce stock from the source item
-      sourceItem.datang -= quantityToMove;
-    }
 
-    alert(`Sebanyak ${quantityToMove.toLocaleString('id-ID')} pcs barang "${sourceItem.nama}" berhasil dipindahkan ke gudang "${destinationGudang}".`);
+      if (quantityToMove > sourceItem.datang) {
+        alert(`Jumlah pindah untuk "${sourceItem.nama}" (${quantityToMove}) tidak boleh melebihi stok tersedia (${sourceItem.datang}).`);
+        hasError = true;
+        return;
+      }
+
+      if (sourceItem.gudang === destinationGudang) {
+        alert(`Barang "${sourceItem.nama}" sudah berada di gudang "${destinationGudang}".`);
+        hasError = true;
+        return;
+      }
+
+      itemsToProcess.push({ sourceItem, quantityToMove });
+    });
+
+    if (hasError || itemsToProcess.length === 0) return;
+
+    itemsToProcess.forEach(({ sourceItem, quantityToMove }) => {
+      if (quantityToMove === sourceItem.datang) {
+        sourceItem.gudang = destinationGudang;
+      } else {
+        let destinationItem = dataBarang.find(item =>
+          item.nama === sourceItem.nama &&
+          item.kode === sourceItem.kode &&
+          item.supplier === sourceItem.supplier &&
+          item.gudang === destinationGudang
+        );
+
+        if (destinationItem) {
+          destinationItem.datang += quantityToMove;
+        } else {
+          const newItem = { ...sourceItem };
+          newItem.gudang = destinationGudang;
+          newItem.datang = quantityToMove;
+          newItem.pesananHistory = [];
+          newItem.kirimanHistory = [{ kirimanKe: 1, jumlah: quantityToMove, tanggal: new Date().toISOString().split('T')[0] }];
+          newItem.kiriman = 1;
+          newItem._idx = Math.max(...dataBarang.map(item => item._idx)) + 1;
+
+          dataBarang.push(newItem);
+        }
+        sourceItem.datang -= quantityToMove;
+      }
+    });
+
+    alert(`${itemsToProcess.length} jenis barang berhasil dipindahkan ke gudang "${destinationGudang}".`);
     moveWarehouseForm.reset();
     smoothToggle(moveWarehouseFormContainer, false);
     renderAll();
     saveAllData();
-    // Also re-render the move form dropdowns in case they are opened again
     renderMoveWarehouseForm();
   });
 }
