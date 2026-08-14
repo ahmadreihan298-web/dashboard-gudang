@@ -7,6 +7,8 @@
   <title>Barang Keluar - Mobile</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="hp.css" />
+  <script src="login.js"></script>
+  <script>if (!isAuthenticated()) window.location.replace('login.html');</script>
 </head>
 
 <body class="hp-body">
@@ -14,6 +16,7 @@
   <!-- Header -->
   <header class="hp-header">
     <button class="hp-menu-toggle" id="hpMenuToggle" title="Menu"><i data-feather="menu"></i></button>
+    <span class="hp-user-info" id="hpUserInfo"></span>
   </header>
 
   <!-- Sidebar HP -->
@@ -25,6 +28,7 @@
     <button class="hp-sidebar-item" data-view="riwayat"><i data-feather="list"></i><span>Riwayat</span></button>
     <div class="hp-sidebar-divider"></div>
     <a href="dashboard.html" class="hp-sidebar-item hp-sidebar-link"><i data-feather="shuffle"></i><span>Pindah Perangkat</span></a>
+    <button class="hp-sidebar-item hp-sidebar-link" data-logout><i data-feather="log-out"></i><span>Keluar</span></button>
   </aside>
   <div class="hp-overlay" id="hpOverlay"></div>
 

@@ -534,3 +534,11 @@ body.hp-body {
   color: var(--primary);
   flex-shrink: 0;
 }
+
+.hp-user-info {
+  margin-left: auto;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+}

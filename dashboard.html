@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gudang - Sistem</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="login.js"></script>
+  <script>if (!isAuthenticated()) window.location.replace('login.html');</script>
 </head>
 
 <body>
@@ -22,7 +24,7 @@
       </div>
       <div class="sidebar-brand-text">
         <span class="sidebar-brand-name">Dashboard Stock</span>
-        <span class="sidebar-brand-sub">Kitab</span>
+        <span class="sidebar-brand-sub" id="sidebarUserInfo">Kitab</span>
       </div>
     </div>
     <div class="sidebar-divider"></div>
@@ -57,6 +59,14 @@
       <li class="menu-item" id="deviceSwitcher">
         <span class="icon"><i data-feather="smartphone"></i></span>
         <span>Pindah Perangkat</span>
+      </li>
+      <li class="menu-item" id="changePasswordBtn">
+        <span class="icon"><i data-feather="lock"></i></span>
+        <span>Ganti Password</span>
+      </li>
+      <li class="menu-item menu-item-danger" data-logout>
+        <span class="icon"><i data-feather="log-out"></i></span>
+        <span>Keluar</span>
       </li>
     </ul>
   </aside>
@@ -626,6 +636,43 @@
        <div class="modal-actions">
          <button id="cancelEditHistoryBtn" class="btn-undo btn-neutral">Batal</button>
          <button id="saveEditHistoryBtn" class="btn-proses">Simpan Perubahan</button>
+       </div>
+     </div>
+   </div>
+
+   <!-- Modal Ganti Password -->
+   <div id="changePasswordModal" class="modal-overlay">
+     <div class="modal-content">
+       <h3>Ganti Password</h3>
+       <div class="modal-form-group">
+         <label for="cpUsername">Username</label>
+         <input type="text" id="cpUsername" readonly style="background: var(--border-color); cursor: not-allowed;" />
+       </div>
+       <div class="modal-form-group">
+         <label for="cpOldPassword">Password Lama</label>
+         <div class="pw-input-wrap">
+           <input type="password" id="cpOldPassword" autocomplete="off" />
+           <button type="button" class="pw-toggle" data-pw-toggle aria-label="Tampilkan password"><i data-feather="eye"></i></button>
+         </div>
+       </div>
+       <div class="modal-form-group">
+         <label for="cpNewPassword">Password Baru</label>
+         <div class="pw-input-wrap">
+           <input type="password" id="cpNewPassword" autocomplete="off" />
+           <button type="button" class="pw-toggle" data-pw-toggle aria-label="Tampilkan password"><i data-feather="eye"></i></button>
+         </div>
+       </div>
+       <div class="modal-form-group">
+         <label for="cpConfirmPassword">Ulangi Password Baru</label>
+         <div class="pw-input-wrap">
+           <input type="password" id="cpConfirmPassword" autocomplete="off" />
+           <button type="button" class="pw-toggle" data-pw-toggle aria-label="Tampilkan password"><i data-feather="eye"></i></button>
+         </div>
+       </div>
+       <div id="cpMessage" class="password-msg"></div>
+       <div class="modal-actions">
+         <button id="cancelChangePasswordBtn" class="btn-undo btn-neutral">Batal</button>
+         <button id="saveChangePasswordBtn" class="btn-proses"><i data-feather="lock"></i> Simpan Password</button>
        </div>
      </div>
    </div>

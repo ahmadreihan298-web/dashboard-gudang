@@ -2730,3 +2730,56 @@ body.dark-mode .menu-list::-webkit-scrollbar-thumb {
     justify-content: space-between;
   }
 }
+
+/* === GANTI PASSWORD (MODAL) === */
+.password-msg {
+  font-size: 13px;
+  min-height: 18px;
+  margin-bottom: 10px;
+}
+
+.password-msg.error {
+  color: var(--danger);
+}
+
+.password-msg.success {
+  color: var(--success);
+}
+
+/* === TOGGLE LIHAT / SEMBUNYIKAN PASSWORD === */
+.pw-input-wrap {
+  position: relative;
+}
+
+.pw-input-wrap input[type="password"],
+.pw-input-wrap input[type="text"] {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.pw-toggle {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-light);
+  cursor: pointer;
+}
+
+.pw-toggle:hover {
+  color: var(--primary);
+}
+
+.pw-toggle i {
+  width: 18px;
+  height: 18px;
+}
