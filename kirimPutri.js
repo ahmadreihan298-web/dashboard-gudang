@@ -56,7 +56,7 @@ function renderKirimPutriCart() {
         <div class="kirim-putri-item" data-idx="${item._idx}">
           <div class="kirim-putri-item-info">
             <div class="kirim-putri-item-name">${item.nama}</div>
-            <div class="kirim-putri-item-meta">Gudang: ${item.gudang || 'N/A'}</div>
+            <div class="kirim-putri-item-meta">Gudang: ${item.gudang || 'N/A'} | Stok: ${Number(item.datang || 0).toLocaleString('id-ID')}</div>
           </div>
           <div class="kirim-putri-item-actions">
             <div class="kirim-putri-item-qty">
@@ -233,6 +233,7 @@ function processKirimPutri() {
     id: nextKpId++,
     tanggal: tanggal,
     items: itemsToSend.map(({ item, qty, subtotal }) => ({
+      _idx: item._idx,
       nama: item.nama,
       kode: item.kode,
       qty,
@@ -274,7 +275,9 @@ function renderKirimPutriHistory() {
           <td>${isFirst ? reverseDateFormat(record.tanggal) : ''}</td>
           <td>${item.nama}</td>
           <td>${item.kode}</td>
-          <td style="text-align: right;">${item.qty.toLocaleString('id-ID')}</td>
+          <td style="text-align: right;">
+            <input type="number" class="kirim-putri-history-qty" data-record-id="${record.id}" data-item-idx="${idx}" min="1" value="${item.qty}" style="width: 80px; text-align: right; padding: 4px 6px; border: 1px solid #ddd; border-radius: 4px;">
+          </td>
           <td style="text-align: right;">Rp ${item.hargaJual.toLocaleString('id-ID')}</td>
           <td style="text-align: right;">Rp ${item.subtotal.toLocaleString('id-ID')}</td>
           ${isFirst ? `<td rowspan="${rowSpan}" style="text-align: right; vertical-align: middle; font-weight: 600;">Rp ${record.total.toLocaleString('id-ID')}</td>` : ''}
@@ -284,6 +287,56 @@ function renderKirimPutriHistory() {
   });
 
   tbody.innerHTML = html;
+
+  tbody.querySelectorAll('.kirim-putri-history-qty').forEach(input => {
+    input.addEventListener('change', function () {
+      const recordId = parseInt(this.dataset.recordId);
+      const itemIdx = parseInt(this.dataset.itemIdx);
+      const newQty = parseInt(this.value) || 0;
+      updateKirimPutriHistoryItem(recordId, itemIdx, newQty);
+    });
+  });
+}
+
+function updateKirimPutriHistoryItem(recordId, itemIdx, newQty) {
+  const record = kirimPutriHistory.find(r => r.id === recordId);
+  if (!record || !Array.isArray(record.items)) return;
+
+  const item = record.items[itemIdx];
+  if (!item) return;
+
+  const oldQty = item.qty;
+  if (newQty < 1) {
+    renderKirimPutriHistory();
+    return alert('Jumlah harus minimal 1.');
+  }
+
+  const dataItem = typeof item._idx === 'number'
+    ? dataBarang.find(i => i._idx === item._idx)
+    : dataBarang.find(i => i.kode === item.kode && i.nama === item.nama);
+  if (!dataItem) {
+    renderKirimPutriHistory();
+    return alert(`Barang "${item.nama}" tidak ditemukan di data stok.`);
+  }
+
+  const diff = newQty - oldQty;
+  if (diff > 0 && dataItem.datang < diff) {
+    renderKirimPutriHistory();
+    return alert(`Stok tersedia "${item.nama}" tidak cukup (${dataItem.datang.toLocaleString('id-ID')}).`);
+  }
+
+  dataItem.datang -= diff;
+
+  const matches = (dataItem.kirimanHistory || []).filter(h => h.tipe === 'kirim-putri' && h.tanggal === record.tanggal);
+  if (matches.length === 1) matches[0].jumlah = newQty;
+
+  item.qty = newQty;
+  item.subtotal = newQty * (item.hargaJual || 0);
+  record.total = record.items.reduce((sum, it) => sum + (it.subtotal || 0), 0);
+
+  renderKirimPutriHistory();
+  renderKirimPutriCart();
+  saveAllData();
 }
 
 function exportKirimPutriHistoryToCsv() {
