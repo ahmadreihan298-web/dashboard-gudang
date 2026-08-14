@@ -49,11 +49,29 @@ function saveUsers(users) {
 
 async function seedDefaultUsers() {
   const users = readUsers();
-  if (users.length > 0) return users;
-  for (const u of DEFAULT_USERS) {
-    users.push({ username: u.username, passwordHash: await hashPassword(u.password), nama: u.nama });
+  if (users.length === 0) {
+    for (const u of DEFAULT_USERS) {
+      users.push({ username: u.username, passwordHash: await hashPassword(u.password), nama: u.nama });
+    }
+    saveUsers(users);
   }
-  saveUsers(users);
+
+  // Sinkron dengan Firebase: pakai data dari Firebase bila tersedia,
+  // atau unggah akun lokal ke Firebase bila dokumennya masih kosong.
+  if (typeof loadUsersFromFirebase === 'function') {
+    try {
+      const fbUsers = await loadUsersFromFirebase();
+      if (Array.isArray(fbUsers) && fbUsers.length > 0) {
+        saveUsers(fbUsers);
+        return fbUsers;
+      }
+      if (users.length > 0 && typeof saveUsersToFirebase === 'function') {
+        await saveUsersToFirebase(users);
+      }
+    } catch (e) {
+      console.warn('Sinkron pengguna ke Firebase gagal, memakai data lokal:', e);
+    }
+  }
   return users;
 }
 
@@ -81,6 +99,13 @@ async function changePassword(username, oldPassword, newPassword, confirmPasswor
   if (newPassword !== confirmPassword) return { ok: false, message: 'Konfirmasi password tidak sama.' };
   user.passwordHash = await hashPassword(newPassword);
   saveUsers(users);
+  if (typeof saveUsersToFirebase === 'function') {
+    try {
+      await saveUsersToFirebase(users);
+    } catch (e) {
+      console.warn('Gagal menyinkronkan password ke Firebase:', e);
+    }
+  }
   return { ok: true, message: 'Password berhasil diganti.' };
 }
 

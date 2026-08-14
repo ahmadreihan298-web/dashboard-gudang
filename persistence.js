@@ -108,6 +108,32 @@ async function loadAllData() {
 
   if (typeof refreshAppViews === 'function') refreshAppViews();
 }
+
+// ================================================================
+//  SINKRON AKUN PENGGUNA (login) KE FIREBASE
+// ================================================================
+async function loadUsersFromFirebase() {
+  if (!firebaseReady) return null;
+  try {
+    const snapshot = await firebaseDb.doc(FIREBASE_USERS_PATH).get();
+    if (snapshot.exists && Array.isArray(snapshot.data().users)) {
+      return snapshot.data().users;
+    }
+    return null; // dokumen kosong / bukan array
+  } catch (e) {
+    console.warn('Gagal memuat pengguna dari Firebase:', e);
+    return null;
+  }
+}
+
+async function saveUsersToFirebase(users) {
+  if (!firebaseReady || typeof FIREBASE_USERS_PATH === 'undefined') return;
+  try {
+    await firebaseDb.doc(FIREBASE_USERS_PATH).set({ users: users }, { merge: false });
+  } catch (e) {
+    console.warn('Gagal menyimpan pengguna ke Firebase:', e);
+  }
+}
 async function saveAllData() {
   saveToLocalStorage(); // Backup instan ke localStorage
 

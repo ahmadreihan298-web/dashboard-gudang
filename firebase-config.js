@@ -9,3 +9,6 @@ const FIREBASE_CONFIG = {
 
 // Jalur baru supaya data Firebase lama tidak ikut terbaca.
 const FIREBASE_DATA_PATH = 'dashboard-gudang/data-clean';
+
+// Jalur dokumen akun pengguna (sinkron login antar perangkat).
+const FIREBASE_USERS_PATH = 'dashboard-gudang/users';
