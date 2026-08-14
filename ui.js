@@ -19,7 +19,7 @@ menuList.addEventListener('click', function (event) {
 
   // Handle Delete All button
   if (clickedItem.id === 'deleteAllBtn') {
-    const confirmation = confirm('PERINGATAN: Anda akan menghapus SEMUA data barang, riwayat barang keluar, gudang, dan transaksi keuangan. Aksi ini tidak dapat dibatalkan.\n\nApakah Anda yakin ingin melanjutkan?');
+    const confirmation = confirm('PERINGATAN: Anda akan menghapus SEMUA data barang, riwayat barang keluar, gudang, transaksi keuangan, dan riwayat pengiriman ke Putri. Aksi ini tidak dapat dibatalkan.\n\nApakah Anda yakin ingin melanjutkan?');
     if (confirmation) {
       dataBarang = []; // Hapus semua data
       dataBarangKeluar = [];
@@ -27,6 +27,8 @@ menuList.addEventListener('click', function (event) {
       if (typeof dataKeuangan !== 'undefined') dataKeuangan = [];
       nextBarangKeluarId = 1;
       if (typeof nextKeuanganId !== 'undefined') nextKeuanganId = 1;
+      if (typeof kirimPutriHistory !== 'undefined') kirimPutriHistory = [];
+      if (typeof nextKpId !== 'undefined') nextKpId = 1;
       filterKode = '__semua'; // Reset filter
       populateFilter();
       renderAll();
@@ -34,6 +36,7 @@ menuList.addEventListener('click', function (event) {
       renderRiwayatBarangKeluarHP();
       if (typeof renderRiwayatPemasukan === 'function') renderRiwayatPemasukan();
       if (typeof renderRiwayatPengeluaran === 'function') renderRiwayatPengeluaran();
+      if (typeof renderKirimPutriHistory === 'function') renderKirimPutriHistory();
       saveAllData();
       alert('Semua data telah berhasil dihapus.');
     }
