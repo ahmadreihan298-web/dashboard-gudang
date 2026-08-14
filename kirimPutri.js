@@ -10,7 +10,7 @@ const kirimPutriSubmitBtn = document.getElementById('kirimPutriSubmitBtn');
 function renderKirimPutriCart() {
   if (!kirimPutriCartContainer) return;
 
-  const availableItems = dataBarang.filter(item => item.datang > 0);
+  const availableItems = dataBarang.filter(item => Number(item.datang || 0) > 0);
 
   if (availableItems.length === 0) {
     kirimPutriCartContainer.innerHTML = '<div class="empty-table" style="padding: 20px 0;">Tidak ada barang dengan stok tersedia.</div>';
