@@ -99,6 +99,24 @@ function getTotalPesan(item) {
   return item.pesananHistory.reduce((sum, order) => sum + order.jumlah, 0);
 }
 
+// Stok yang bisa dipakai keluar/kirim = datang (yang tercatat masuk) + sisa (isi manual)
+function getStok(item) {
+  return (item.datang || 0) + (item.sisa || 0);
+}
+
+// Kurangi stok: sisa dulu, baru datang
+function kurangiStok(item, qty) {
+  let remaining = qty;
+  const sisa = item.sisa || 0;
+  if (sisa > 0) {
+    const take = Math.min(sisa, remaining);
+    item.sisa = sisa - take;
+    remaining -= take;
+  }
+  item.datang = (item.datang || 0) - remaining;
+  return qty;
+}
+
 function renderAll() {
   renderHomePage();
   renderDataBarang();

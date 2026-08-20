@@ -29,7 +29,7 @@ function renderGudang() {
     }
     acc[gudang].items.push(item);
     acc[gudang].suppliers.add(item.supplier);
-    acc[gudang].totalStock += item.datang;
+    acc[gudang].totalStock += (item.datang || 0) + (item.sisa || 0);
     return acc;
   }, {});
 
@@ -128,7 +128,7 @@ function renderGudangItemTable() {
           <td>${item.nama}</td>
           <td>${splitKode(item.kode).map(k => `<span class="badge">${k}</span>`).join(' ')}</td>
           <td>${item.gudang || 'N/A'}</td>
-          <td class="text-right">${item.datang.toLocaleString('id-ID')}</td>
+          <td class="text-right">${((item.datang || 0) + (item.sisa || 0)).toLocaleString('id-ID')}</td>
         </tr>
       `;
     });

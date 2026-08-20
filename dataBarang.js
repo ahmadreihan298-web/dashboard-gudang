@@ -24,6 +24,78 @@ const arrowSupplier = document.getElementById('arrowSupplier');
 const arrowTanggal = document.getElementById('arrowTanggal');
 const arrowKode = document.getElementById('arrowKode');
 
+// ================================================================
+//  HALAMAN SISA
+// ================================================================
+function renderSisa() {
+  const container = document.getElementById('tabelSisa');
+  if (!container) return;
+
+  const sorted = [...dataBarang].sort((a, b) => (a.nama || '').localeCompare(b.nama || '', 'id'));
+  if (sorted.length === 0) {
+    container.innerHTML = `<tr><td colspan="5" class="empty-table">Tidak ada data</td></tr>`;
+    return;
+  }
+  container.innerHTML = sorted.map((item, index) => {
+    const badgeHtml = splitKode(item.kode).map(k => `<span class="badge">${k}</span>`).join(' ');
+    const sisa = item.sisa || 0;
+    return `<tr>
+      <td>${index + 1}</td>
+      <td>${badgeHtml}</td>
+      <td>${item.nama}</td>
+      <td>${item.supplier}</td>
+      <td class="text-right"><input type="number" class="input-sisa-stok" data-idx="${item._idx}" min="0" value="${sisa}" style="width:140px; text-align:center; height:36px; border:1px solid var(--border-color); border-radius: var(--radius-md); padding:0 10px;" /></td>
+    </tr>`;
+  }).join('');
+}
+
+document.getElementById('tabelSisa')?.addEventListener('change', function (event) {
+  const input = event.target;
+  if (!input.classList.contains('input-sisa-stok')) return;
+  const idx = parseInt(input.dataset.idx, 10);
+  const item = dataBarang.find(i => i._idx === idx);
+  if (!item) return;
+  const val = parseInt(input.value, 10);
+  item.sisa = isNaN(val) || val < 0 ? 0 : val;
+  saveAllData();
+  renderGudang();
+  renderGudangItemTable();
+});
+
+document.getElementById('tabelSisa')?.addEventListener('keydown', function (event) {
+  if (event.key !== 'Enter') return;
+  const input = event.target;
+  if (!input.classList.contains('input-sisa-stok')) return;
+  const idx = parseInt(input.dataset.idx, 10);
+  const item = dataBarang.find(i => i._idx === idx);
+  if (!item) return;
+  const val = parseInt(input.value, 10);
+  item.sisa = isNaN(val) || val < 0 ? 0 : val;
+  saveAllData();
+  renderGudang();
+  renderGudangItemTable();
+  showSisaDoneToast();
+});
+
+function showSisaDoneToast() {
+  const existing = document.getElementById('sisa-done-toast');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.id = 'sisa-done-toast';
+  toast.innerHTML = '<div style="display:flex; flex-direction:column; align-items:center; gap:14px;"><svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span style="font-size:16px; font-family:sans-serif; color:#333;">Stok sudah ditambahkan ke gudang</span></div>';
+  toast.style.cssText = 'position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); display:flex; align-items:center; justify-content:center; background:#fff; border:1px solid #e2e2e2; border-radius:16px; box-shadow:0 12px 32px rgba(0,0,0,.18); padding:28px 36px; z-index:9999; opacity:0; transition:opacity .25s ease, transform .25s ease;';
+  document.body.appendChild(toast);
+  requestAnimationFrame(() => {
+    toast.style.opacity = '1';
+    toast.style.transform = 'translate(-50%,-50%) scale(1.05)';
+  });
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translate(-50%,-50%) scale(1)';
+    setTimeout(() => toast.remove(), 250);
+  }, 1800);
+}
+
 // Navigasi geser tabel Data Barang
 (function setupDataTableScroll() {
   const wrapper = document.querySelector('#page-dataBarang .table-wrapper');
@@ -264,6 +336,15 @@ document.getElementById('saveEditItemBtn').addEventListener('click', function() 
   renderDataBarang();
   document.getElementById('editItemModal').classList.remove('is-visible');
   currentEditIdx = null;
+});
+
+// Enter di kolom modal Edit Barang = klik Simpan Perubahan + tutup modal
+document.getElementById('editItemModal')?.addEventListener('keydown', function (event) {
+  if (event.key !== 'Enter') return;
+  const tag = event.target.tagName;
+  if (tag !== 'INPUT' && tag !== 'TEXTAREA' && tag !== 'SELECT') return;
+  event.preventDefault();
+  document.getElementById('saveEditItemBtn').click();
 });
 
 // Tutup modal saat klik di luar area konten

@@ -10,7 +10,7 @@ const kirimPutriSubmitBtn = document.getElementById('kirimPutriSubmitBtn');
 function renderKirimPutriCart() {
   if (!kirimPutriCartContainer) return;
 
-  const availableItems = dataBarang.filter(item => Number(item.datang || 0) > 0);
+  const availableItems = dataBarang.filter(item => getStok(item) > 0);
 
   if (availableItems.length === 0) {
     kirimPutriCartContainer.innerHTML = '<div class="empty-table" style="padding: 20px 0;">Tidak ada barang dengan stok tersedia.</div>';
@@ -37,6 +37,7 @@ function renderKirimPutriCart() {
     <div class="kirim-putri-cart-header">
       <label class="select-all-label">
         <input type="checkbox" id="kirimPutriSelectAll">
+        <span class="kirim-putri-checkbox"></span>
         <span>Pilih Semua</span>
       </label>
     </div>
@@ -56,11 +57,11 @@ function renderKirimPutriCart() {
         <div class="kirim-putri-item" data-idx="${item._idx}">
           <div class="kirim-putri-item-info">
             <div class="kirim-putri-item-name">${item.nama}</div>
-            <div class="kirim-putri-item-meta">Gudang: ${item.gudang || 'N/A'} | Stok: ${Number(item.datang || 0).toLocaleString('id-ID')}</div>
+            <div class="kirim-putri-item-meta">Gudang: ${item.gudang || 'N/A'} | Stok: ${getStok(item).toLocaleString('id-ID')}</div>
           </div>
           <div class="kirim-putri-item-actions">
             <div class="kirim-putri-item-qty">
-              <input type="number" class="kirim-putri-qty" data-idx="${item._idx}" min="1" max="${item.datang}" value="1" disabled>
+              <input type="number" class="kirim-putri-qty" data-idx="${item._idx}" min="1" max="${getStok(item)}" value="1" disabled>
             </div>
             <div class="kirim-putri-item-subtotal">Rp 0</div>
           </div>
@@ -115,7 +116,7 @@ function renderKirimPutriCart() {
 
       let qty = parseInt(this.value) || 0;
       if (qty < 1) qty = 1;
-      if (qty > item.datang) qty = item.datang;
+      if (qty > getStok(item)) qty = getStok(item);
       this.value = qty;
 
       const subtotal = qty * (item.hargaJual || 0);
@@ -205,8 +206,8 @@ function processKirimPutri() {
       return;
     }
 
-    if (qty > item.datang) {
-      alert(`Jumlah kirim untuk "${item.nama}" (${qty}) tidak boleh melebihi stok tersedia (${item.datang}).`);
+    if (qty > getStok(item)) {
+      alert(`Jumlah kirim untuk "${item.nama}" (${qty}) tidak boleh melebihi stok tersedia (${getStok(item)}).`);
       hasError = true;
       return;
     }
@@ -219,7 +220,7 @@ function processKirimPutri() {
   if (hasError || itemsToSend.length === 0) return;
 
   itemsToSend.forEach(({ item, qty }) => {
-    item.datang -= qty;
+    kurangiStok(item, qty);
     item.kiriman += 1;
     item.kirimanHistory.push({
       kirimanKe: item.kiriman,
@@ -272,15 +273,15 @@ function renderKirimPutriHistory() {
       html += `
         <tr>
           ${isFirst ? `<td rowspan="${rowSpan}" style="text-align: center; vertical-align: middle;">${no--}</td>` : ''}
-          <td>${isFirst ? reverseDateFormat(record.tanggal) : ''}</td>
-          <td>${item.nama}</td>
-          <td>${item.kode}</td>
-          <td style="text-align: right;">
-            <input type="number" class="kirim-putri-history-qty" data-record-id="${record.id}" data-item-idx="${idx}" min="1" value="${item.qty}" style="width: 80px; text-align: right; padding: 4px 6px; border: 1px solid #ddd; border-radius: 4px;">
+          <td style="text-align: center;">${isFirst ? reverseDateFormat(record.tanggal) : ''}</td>
+          <td style="text-align: center;">${item.nama}</td>
+          <td style="text-align: center;">${item.kode}</td>
+          <td style="text-align: center;">
+            <input type="number" class="kirim-putri-history-qty" data-record-id="${record.id}" data-item-idx="${idx}" min="1" value="${item.qty}" style="width:140px; text-align:center; height:36px; border:1px solid var(--border-color); border-radius: var(--radius-md); padding:0 10px;">
           </td>
-          <td style="text-align: right;">Rp ${item.hargaJual.toLocaleString('id-ID')}</td>
-          <td style="text-align: right;">Rp ${item.subtotal.toLocaleString('id-ID')}</td>
-          ${isFirst ? `<td rowspan="${rowSpan}" style="text-align: right; vertical-align: middle; font-weight: 600;">Rp ${record.total.toLocaleString('id-ID')}</td>` : ''}
+          <td style="text-align: center;">Rp ${item.hargaJual.toLocaleString('id-ID')}</td>
+          <td style="text-align: center;">Rp ${item.subtotal.toLocaleString('id-ID')}</td>
+          ${isFirst ? `<td rowspan="${rowSpan}" style="text-align: center; vertical-align: middle; font-weight: 600;">Rp ${record.total.toLocaleString('id-ID')}</td>` : ''}
         </tr>
       `;
     });
@@ -382,6 +383,23 @@ if (kirimPutriForm) {
     processKirimPutri();
   });
 }
+
+// Enter di halaman Kirim ke Putri = klik tombol Kirim ke Putri
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter') return;
+  const page = document.getElementById('page-kirimPutri');
+  if (!page || !page.classList.contains('active')) return;
+
+  const target = e.target;
+  if (target.closest && target.closest('button')) return;
+  if (target !== document.body && target !== page && !page.contains(target)) return;
+
+  const tag = target.tagName;
+  if ((tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') && kirimPutriForm && !kirimPutriForm.contains(target)) return;
+
+  e.preventDefault();
+  if (kirimPutriSubmitBtn) kirimPutriSubmitBtn.click();
+});
 
 const exportKirimPutriCsvBtn = document.getElementById('exportKirimPutriCsvBtn');
 if (exportKirimPutriCsvBtn) {

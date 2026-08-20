@@ -318,13 +318,13 @@ function updateTotalHargaBarangKeluar() {
     if (!itemName || requestedJumlah <= 0) return;
 
     const relevantDataBarangItems = dataBarang
-      .filter(item => (item.nama || '').trim() === itemName && parseFloat(item.datang) > 0)
-      .sort((a, b) => parseFloat(b.datang) - parseFloat(a.datang));
+      .filter(item => (item.nama || '').trim() === itemName && getStok(item) > 0)
+      .sort((a, b) => getStok(b) - getStok(a));
 
     let remaining = requestedJumlah;
     for (const item of relevantDataBarangItems) {
       if (remaining <= 0) break;
-      const deducted = Math.min(remaining, parseFloat(item.datang));
+      const deducted = Math.min(remaining, getStok(item));
       const hargaJual = parseFloat(item.hargaJual) || 0;
       total += deducted * hargaJual;
       remaining -= deducted;
@@ -360,7 +360,7 @@ function populateBarangKeluarForm(suffixFilter) {
   barangKeluarTabContentContainer.removeAttribute('style');
   barangKeluarTabContentContainer.className = 'item-tab-content';
 
-  const availableItems = dataBarang.filter(item => item.datang > 0);
+  const availableItems = dataBarang.filter(item => getStok(item) > 0);
   const uniqueKodes = getAllUniqueKodes(availableItems);
 
   if (availableItems.length === 0) {
@@ -385,7 +385,7 @@ function populateBarangKeluarForm(suffixFilter) {
       };
     }
 
-    acc[itemName].totalStok += item.datang;
+    acc[itemName].totalStok += getStok(item);
 
     splitKode(item.kode).forEach(k => {
       acc[itemName].kodes.add(k);
@@ -393,7 +393,7 @@ function populateBarangKeluarForm(suffixFilter) {
 
     acc[itemName].originalItems.push({
       _idx: item._idx,
-      datang: item.datang,
+      datang: getStok(item),
       gudang: item.gudang
     });
 
@@ -712,8 +712,8 @@ if (formBarangKeluar) {
       const requestedJumlah = parseInt(qtyInput.value);
 
       // Find all actual dataBarang items for this name that have stock
-      const relevantDataBarangItems = dataBarang.filter(item => item.nama === itemName && item.datang > 0);
-      const totalAvailableStock = relevantDataBarangItems.reduce((sum, item) => sum + item.datang, 0);
+      const relevantDataBarangItems = dataBarang.filter(item => item.nama === itemName && getStok(item) > 0);
+      const totalAvailableStock = relevantDataBarangItems.reduce((sum, item) => sum + getStok(item), 0);
 
       if (isNaN(requestedJumlah) || requestedJumlah <= 0) {
         alert(`Jumlah keluar untuk barang "${itemName}" harus lebih dari 0.`);
@@ -730,7 +730,7 @@ if (formBarangKeluar) {
         itemName: itemName,
         requestedJumlah: requestedJumlah,
         // Sort by stock descending to deduct from larger quantities first (or any other logic)
-        relevantDataBarangItems: relevantDataBarangItems.sort((a, b) => b.datang - a.datang)
+        relevantDataBarangItems: relevantDataBarangItems.sort((a, b) => getStok(b) - getStok(a))
       });
     });
 
@@ -746,10 +746,10 @@ if (formBarangKeluar) {
       for (const item of relevantDataBarangItems) {
         if (remainingToDeduct <= 0) break; // All requested quantity has been deducted
 
-        const deductedQty = Math.min(remainingToDeduct, item.datang);
+        const deductedQty = Math.min(remainingToDeduct, getStok(item));
         if (deductedQty > 0) {
           // The 'item' here is a reference to the object in dataBarang, so this modification is persistent.
-          item.datang -= deductedQty; // Reduce stock from the specific dataBarang entry
+          kurangiStok(item, deductedQty); // Reduce stock (sisa dulu, baru datang)
           dataBarangKeluar.push({ // Record each individual deduction
             id: nextBarangKeluarId++,
             barangIdx: item._idx, // Store the original _idx for accurate reversal

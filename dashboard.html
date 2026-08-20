@@ -50,6 +50,8 @@
             data-feather="archive"></i></span><span>Gudang</span></li>
       <li class="menu-item" data-page="kirimPutri"><span class="icon"><i
             data-feather="send"></i></span><span>Kirim ke Putri</span></li>
+      <li class="menu-item" data-page="sisa"><span class="icon"><i
+            data-feather="layers"></i></span><span>Sisa</span></li>
       <li class="menu-item" id="theme-switcher">
         <span class="icon"><i data-feather="moon"></i></span>
         <span>Mode Gelap</span>
@@ -207,18 +209,19 @@
       <div class="filter-area" style="margin-top:10px; margin-bottom:10px;">
         <label for="filterStatus"><i data-feather="list"></i> Tampilkan :</label>
         <select id="filterStatus">
-          <option value="semua">Semua</option>
-          <option value="belum" selected>Belum Lunas</option>
+          <option value="semua" selected>Semua</option>
+          <option value="belum">Belum Lunas</option>
           <option value="lunas">Lunas</option>
         </select>
         <span class="badge-filter" id="jumlahStatus">0 item</span>
       </div>
 
       <div class="search-container">
+        <input type="text" style="position:absolute; left:-9999px;" tabindex="-1" autocomplete="username" aria-hidden="true" />
         <div class="search-wrapper">
           <i data-feather="search" class="search-icon"></i>
-          <input type="text" class="search-input" id="searchBarangMasuk"
-            placeholder="Cari kode, nama, atau supplier..." />
+          <input type="search" class="search-input" id="searchBarangMasuk"
+            placeholder="Cari kode, nama, atau supplier..." autocomplete="off" />
         </div>
       </div>
 
@@ -269,6 +272,30 @@
       </div>
     </div>
 
+    <!-- HALAMAN SISA -->
+    <div class="page" id="page-sisa">
+      <div class="header-section">
+        <div>
+          <h1><i data-feather="layers"></i> Sisa</h1>
+          <p class="subtitle" style="margin-bottom: 0;"></p>
+        </div>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Kode</th>
+              <th>Nama</th>
+              <th>Supplier</th>
+              <th class="text-right">Stok</th>
+            </tr>
+          </thead>
+          <tbody id="tabelSisa"></tbody>
+        </table>
+      </div>
+    </div>
+
     <!-- HALAMAN LAIN (kosong) -->
     <div class="page" id="page-barangKeluar">
       <div class="header-section">
@@ -286,7 +313,7 @@
               <div class="search-wrapper">
                 <i data-feather="search" class="search-icon"></i>
                 <input type="text" class="search-input" id="searchBarangKeluar"
-                  placeholder="Cari nama barang di semua tab..." />
+                  placeholder="Cari nama barang di semua tab..." style="padding-left: 40px;" />
               </div>
             </div>
             <div id="barangKeluarCodeTabs" class="item-code-tabs"></div>
@@ -589,14 +616,14 @@
           <table class="data-table" id="kirimPutriHistoryTable">
             <thead>
               <tr>
-                <th style="width: 40px;">No</th>
-                <th>Tanggal</th>
-                <th>Nama Barang</th>
-                <th>Kode</th>
-                <th style="text-align: right;">Qty</th>
-                <th style="text-align: right;">Harga Jual</th>
-                <th style="text-align: right;">Subtotal</th>
-                <th style="text-align: right;">Total</th>
+                <th style="width: 40px; text-align: center;">No</th>
+                <th style="text-align: center;">Tanggal</th>
+                <th style="text-align: center;">Nama Barang</th>
+                <th style="text-align: center;">Kode</th>
+                <th style="text-align: center;">Qty</th>
+                <th style="text-align: center;">Harga Jual</th>
+                <th style="text-align: center;">Subtotal</th>
+                <th style="text-align: center;">Total</th>
               </tr>
             </thead>
             <tbody></tbody>

@@ -226,6 +226,18 @@ tabelMasuk.addEventListener('click', function (event) {
   }
 });
 
+// Enter pada kolom kiriman = klik tombol Proses baris tersebut
+tabelMasuk.addEventListener('keydown', function (event) {
+  if (event.key !== 'Enter') return;
+  const input = event.target;
+  if (!input.classList.contains('input-kirim') && !input.classList.contains('input-date') && !input.classList.contains('input-qty')) return;
+  const row = input.closest('tr');
+  if (!row) return;
+  event.preventDefault();
+  const btn = row.querySelector('.btn-proses');
+  if (btn) btn.click();
+});
+
 // ================================================================
 //  EDIT RIWAYAT KIRIMAN
 // ================================================================
@@ -316,6 +328,15 @@ document.getElementById('saveEditHistoryBtn').addEventListener('click', function
   historiEditItemIdx = null;
   saveAllData();
   renderAll();
+});
+
+// Enter di kolom modal Edit Riwayat Kiriman = klik Simpan Perubahan + tutup modal
+document.getElementById('editHistoryModal')?.addEventListener('keydown', function (event) {
+  if (event.key !== 'Enter') return;
+  const tag = event.target.tagName;
+  if (tag !== 'INPUT' && tag !== 'TEXTAREA' && tag !== 'SELECT') return;
+  event.preventDefault();
+  document.getElementById('saveEditHistoryBtn').click();
 });
 
 document.getElementById('editHistoryModal').addEventListener('click', function(e) {
