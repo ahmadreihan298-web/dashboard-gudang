@@ -71,9 +71,9 @@ function renderBarangMasuk() {
         <td>${splitKode(item.kode).map(k => `<span class="badge">${k}</span>`).join(' ')}</td>
         <td>${item.nama}</td>
         <td>${item.supplier}</td>
-        <td class="text-right">${totalPesan.toLocaleString('id-ID')}</td>
-        <td class="text-right">${item.datang.toLocaleString('id-ID')}</td>
-        <td><span class="badge-kirim">${historyHtml ? historyHtml : '<span>Belum ada</span>'}</span></td>
+        <td class="text-right">${totalPesan > 0 ? totalPesan.toLocaleString('id-ID') : '<span class="riwayat-kosong">Belum ada</span>'}</td>
+        <td class="text-right">${item.datang > 0 ? item.datang.toLocaleString('id-ID') : '<span class="riwayat-kosong">Belum ada</span>'}</td>
+        <td><span class="badge-kirim">${historyHtml ? historyHtml : '<span class="riwayat-kosong">Belum ada</span>'}</span></td>
         <td class="text-right">${kurangHtml}</td>
         <td>${isLunas ? '<span class="status-lunas"><i data-feather="check-circle"></i> Lunas</span>' : '<span class="status-proses"><i data-feather="loader"></i> Proses</span>'}</td>
         <td>
@@ -153,9 +153,8 @@ document.getElementById('refreshBtn').addEventListener('click', function () {
   const rightButtons = [btnRightBottom, btnRightTop].filter(Boolean);
 
   function updateNavState() {
-    const maxLeft = wrapper.scrollWidth - wrapper.clientWidth;
-    leftButtons.forEach(btn => btn.disabled = wrapper.scrollLeft <= 1);
-    rightButtons.forEach(btn => btn.disabled = wrapper.scrollLeft >= maxLeft - 1);
+    leftButtons.forEach(btn => btn.disabled = false);
+    rightButtons.forEach(btn => btn.disabled = false);
   }
 
   leftButtons.forEach(btn => {
@@ -504,7 +503,7 @@ function parseAndUploadCsv(csvString) {
     newItems.push({
       tanggal: isoDate, kode: values[columnIndex.kode], nama: values[columnIndex.nama], supplier: values[columnIndex.supplier], gudang: values[columnIndex.gudang],
       datang: datang, kiriman: kiriman, hargaSatuan: hargaSatuan, hargaJual: hargaJual, // Use parsed values
-      kirimanHistory: [{ kirimanKe: kiriman, jumlah: datang, tanggal: isoDate }],
+      kirimanHistory: kiriman > 0 ? [{ kirimanKe: kiriman, jumlah: datang, tanggal: isoDate }] : [],
       pesananHistory: [{ jumlah: pesan, tanggal: isoDate }],
     });
   }

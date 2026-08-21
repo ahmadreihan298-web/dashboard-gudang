@@ -1654,6 +1654,10 @@ tfoot td {
   text-align: left !important;
 }
 
+#page-barangMasuk td:nth-child(7):has(> .badge-kirim > span) {
+  text-align: center !important;
+}
+
 #page-barangMasuk th:nth-child(7) {
   text-indent: 20px;
 }
@@ -1708,6 +1712,10 @@ tfoot td {
   background-color: rgba(148, 163, 184, 0.12) !important;
   color: var(--text-muted);
   transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+#page-home td.empty-table {
+  text-align: center !important;
 }
 
 .empty-table {
