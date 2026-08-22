@@ -1,4 +1,29 @@
 ﻿// ================================================================
+//  TOAST NOTIFICATION
+// ================================================================
+function toast(message, duration = 2000) {
+  const existing = document.querySelector('.toast-center');
+  if (existing) existing.remove();
+
+  const el = document.createElement('div');
+  el.className = 'toast-center';
+  el.innerHTML = `
+    <svg class="toast-center-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    <div class="toast-center-message">${message}</div>
+  `;
+  document.body.appendChild(el);
+
+  requestAnimationFrame(() => {
+    el.classList.add('is-visible');
+  });
+
+  setTimeout(() => {
+    el.classList.remove('is-visible');
+    el.addEventListener('transitionend', () => el.remove());
+  }, duration);
+}
+
+// ================================================================
 //  NAVIGASI
 // ================================================================
 const menuList = document.querySelector('.menu-list');
@@ -38,7 +63,7 @@ menuList.addEventListener('click', function (event) {
       if (typeof renderRiwayatPengeluaran === 'function') renderRiwayatPengeluaran();
       if (typeof renderKirimPutriHistory === 'function') renderKirimPutriHistory();
       saveAllData();
-      alert('Semua data telah berhasil dihapus.');
+      toast('Semua data telah berhasil dihapus.');
     }
     return; // Stop after handling action
   }

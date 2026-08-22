@@ -411,7 +411,7 @@ uploadCsvBtn.addEventListener('click', function () {
       try {
         const csvContent = e.target.result;
         parseAndUploadCsv(csvContent);
-        alert('Data CSV berhasil diunggah dan ditambahkan.');
+        toast('Data CSV berhasil diunggah dan ditambahkan.');
         csvFileInput.value = ''; // Clear file input
         csvFileNameSpan.textContent = 'Tidak ada file dipilih';
         uploadCsvBtn.disabled = true;

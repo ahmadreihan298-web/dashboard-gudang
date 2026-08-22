@@ -160,7 +160,7 @@ if (formPemasukan) {
     }
 
     dataKeuangan.push({ id: nextKeuanganId++, type: 'pemasukan', tanggal, keterangan, jumlah });
-    alert('Pemasukan berhasil dicatat.');
+    toast('Pemasukan berhasil dicatat.');
     formPemasukan.reset();
     document.getElementById('pemasukanTanggal').value = new Date().toISOString().split('T')[0];
     renderRiwayatPemasukan();
@@ -184,7 +184,7 @@ if (formPengeluaran) {
     }
 
     dataKeuangan.push({ id: nextKeuanganId++, type: 'pengeluaran', tanggal, keterangan, jumlah });
-    alert('Pengeluaran berhasil dicatat.');
+    toast('Pengeluaran berhasil dicatat.');
     formPengeluaran.reset();
     document.getElementById('pengeluaranTanggal').value = new Date().toISOString().split('T')[0];
     renderRiwayatPengeluaran();

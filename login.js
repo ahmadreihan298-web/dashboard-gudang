@@ -89,7 +89,7 @@ async function login(username, password) {
   return { ok: true, user };
 }
 
-async function changePassword(username, oldPassword, newPassword, confirmPassword) {
+async function changePassword(username, oldPassword, newPassword, confirmPassword, newUsername) {
   const users = await seedDefaultUsers();
   const user = users.find(u => u.username.toLowerCase() === username.trim().toLowerCase());
   if (!user) return { ok: false, message: 'Username tidak ditemukan.' };
@@ -98,6 +98,14 @@ async function changePassword(username, oldPassword, newPassword, confirmPasswor
   if (!newPassword || newPassword.length < 4) return { ok: false, message: 'Password baru minimal 4 karakter.' };
   if (newPassword !== confirmPassword) return { ok: false, message: 'Konfirmasi password tidak sama.' };
   user.passwordHash = await hashPassword(newPassword);
+  if (newUsername && newUsername.trim().toLowerCase() !== user.username.toLowerCase()) {
+    const target = newUsername.trim().toLowerCase();
+    if (users.some(u => u.username.toLowerCase() === target && u !== user)) {
+      return { ok: false, message: 'Username baru sudah dipakai.' };
+    }
+    user.username = target;
+    user.nama = target.charAt(0).toUpperCase() + target.slice(1);
+  }
   saveUsers(users);
   if (typeof saveUsersToFirebase === 'function') {
     try {
@@ -106,7 +114,7 @@ async function changePassword(username, oldPassword, newPassword, confirmPasswor
       console.warn('Gagal menyinkronkan password ke Firebase:', e);
     }
   }
-  return { ok: true, message: 'Password berhasil diganti.' };
+  return { ok: true, message: 'Akun berhasil diperbarui.', changedUsername: !!newUsername && newUsername.trim().toLowerCase() !== username.trim().toLowerCase() };
 }
 
 function getSession() {
@@ -215,6 +223,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const oldPass = document.getElementById('cpOldPassword').value;
       const newPass = document.getElementById('cpNewPassword').value;
       const confirmPass = document.getElementById('cpConfirmPassword').value;
+      const newUsername = document.getElementById('cpUsername').value.trim();
       const msgEl = document.getElementById('cpMessage');
       if (!username || !oldPass || !newPass || !confirmPass) {
         if (msgEl) {
@@ -225,7 +234,17 @@ document.addEventListener('DOMContentLoaded', function () {
       }
       saveCpBtn.disabled = true;
       saveCpBtn.textContent = 'Menyimpan...';
-      const res = await changePassword(username, oldPass, newPass, confirmPass);
+      const res = await changePassword(username, oldPass, newPass, confirmPass, newUsername);
+      if (res.ok) {
+        if (res.changedUsername) {
+          const s = getSession();
+          if (s) {
+            s.username = newUsername.trim();
+            s.nama = newUsername.trim().charAt(0).toUpperCase() + newUsername.trim().slice(1);
+            localStorage.setItem(SESSION_KEY, JSON.stringify(s));
+          }
+        }
+      }
       if (msgEl) {
         msgEl.textContent = res.message;
         msgEl.className = 'password-msg ' + (res.ok ? 'success' : 'error');

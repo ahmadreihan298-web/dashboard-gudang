@@ -765,7 +765,7 @@ if (formBarangKeluar) {
     });
 
     const uniqueItemsProcessed = itemsToProcess.length;
-    alert(`${uniqueItemsProcessed} jenis barang dengan total ${totalTransactionsRecorded} transaksi keluar berhasil dicatat.`);
+    toast(`${uniqueItemsProcessed} jenis barang dengan total ${totalTransactionsRecorded} transaksi keluar berhasil dicatat.`);
     formBarangKeluar.reset();
     populateBarangKeluarForm();
     renderRiwayatBarangKeluar();

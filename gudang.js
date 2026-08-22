@@ -178,7 +178,7 @@ if (addWarehouseForm) {
 
     renderGudang();
     saveAllData();
-    alert(`Gudang "${gudangName}" berhasil ditambahkan.`);
+    toast(`Gudang "${gudangName}" berhasil ditambahkan.`);
 
     addWarehouseForm.reset();
     smoothToggle(addWarehouseFormContainer, false);
@@ -363,7 +363,7 @@ if (moveWarehouseForm) {
       }
     });
 
-    alert(`${itemsToProcess.length} jenis barang berhasil dipindahkan ke gudang "${destinationGudang}".`);
+    toast(`${itemsToProcess.length} jenis barang berhasil dipindahkan ke gudang "${destinationGudang}".`);
     moveWarehouseForm.reset();
     smoothToggle(moveWarehouseFormContainer, false);
     renderAll();

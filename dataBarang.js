@@ -128,22 +128,7 @@ if (filterSisaKodeSelect) {
 }
 
 function showSisaDoneToast() {
-  const existing = document.getElementById('sisa-done-toast');
-  if (existing) existing.remove();
-  const toast = document.createElement('div');
-  toast.id = 'sisa-done-toast';
-  toast.innerHTML = '<div style="display:flex; flex-direction:column; align-items:center; gap:14px;"><svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span style="font-size:16px; font-family:sans-serif; color:#333;">Stok sudah ditambahkan ke gudang</span></div>';
-  toast.style.cssText = 'position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); display:flex; align-items:center; justify-content:center; background:#fff; border:1px solid #e2e2e2; border-radius:16px; box-shadow:0 12px 32px rgba(0,0,0,.18); padding:28px 36px; z-index:9999; opacity:0; transition:opacity .25s ease, transform .25s ease;';
-  document.body.appendChild(toast);
-  requestAnimationFrame(() => {
-    toast.style.opacity = '1';
-    toast.style.transform = 'translate(-50%,-50%) scale(1.05)';
-  });
-  setTimeout(() => {
-    toast.style.opacity = '0';
-    toast.style.transform = 'translate(-50%,-50%) scale(1)';
-    setTimeout(() => toast.remove(), 250);
-  }, 1800);
+  toast('Stok sudah ditambahkan ke gudang', 1800);
 }
 
 // Navigasi geser tabel Data Barang
@@ -326,11 +311,11 @@ document.getElementById('cancelEditItemBtn').addEventListener('click', function(
 // ================================================================
 let editPesananList = [];
 
-function renderEditOrderHistoryList(item) {
+function renderEditOrderHistoryList(item, list) {
   const container = document.getElementById('editOrderHistoryList');
   if (!container) return;
 
-  editPesananList = item.pesananHistory ? [...item.pesananHistory] : [];
+  editPesananList = Array.isArray(list) ? [...list] : (item.pesananHistory ? [...item.pesananHistory] : []);
 
   let html = '';
   editPesananList.forEach((order, i) => {
@@ -356,7 +341,8 @@ document.getElementById('editOrderHistoryList').addEventListener('click', functi
   if (!removeBtn) return;
   const idx = parseInt(removeBtn.getAttribute('data-remove-order'));
   editPesananList.splice(idx, 1);
-  renderEditOrderHistoryList(dataBarang.find(d => d._idx === currentEditIdx));
+  const item = dataBarang.find(d => d._idx === currentEditIdx);
+  if (item) renderEditOrderHistoryList(item, editPesananList);
 });
 
 document.getElementById('saveEditItemBtn').addEventListener('click', function() {

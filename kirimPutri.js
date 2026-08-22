@@ -277,7 +277,7 @@ function processKirimPutri() {
     total: totalNominal
   });
 
-  alert(`${itemsToSend.length} jenis barang berhasil dikirim ke Putri. Total: Rp ${totalNominal.toLocaleString('id-ID')}`);
+  toast(`${itemsToSend.length} jenis barang berhasil dikirim ke Putri. Total: Rp ${totalNominal.toLocaleString('id-ID')}`);
   renderKirimPutriCart();
   renderKirimPutriHistory();
   saveAllData();
