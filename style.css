@@ -3256,12 +3256,13 @@ body.dark-mode .input-sisa-stok:focus {
 .kirim-putri-cart-header {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  gap: 12px;
+  justify-content: space-between;
+  gap: 16px;
   margin-bottom: 16px;
   padding-bottom: 12px;
   border-bottom: 1px solid var(--border-color);
   padding-left: 16px;
+  padding-right: 16px;
 }
 
 .kirim-putri-cart-header .select-all-label {
