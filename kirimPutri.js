@@ -40,6 +40,9 @@ function renderKirimPutriCart() {
         <span class="kirim-putri-checkbox"></span>
         <span>Pilih Semua</span>
       </label>
+      <div class="set-all-qty-wrapper">
+        <input type="number" class="set-all-qty-input" placeholder="Jumlah" min="1" disabled>
+      </div>
     </div>
     <div class="kirim-putri-cart-groups">
   `;
@@ -127,7 +130,10 @@ function renderKirimPutriCart() {
   });
 
   if (selectAllEl) {
+    const setAllQtyInput = document.querySelector('.set-all-qty-input');
     selectAllEl.checked = false;
+    if (setAllQtyInput) setAllQtyInput.disabled = true;
+
     selectAllEl.addEventListener('change', function () {
       const cards = kirimPutriCartContainer.querySelectorAll('.kirim-putri-item');
       cards.forEach(card => {
@@ -147,7 +153,33 @@ function renderKirimPutriCart() {
           card.querySelector('.kirim-putri-item-subtotal').textContent = 'Rp 0';
         }
       });
+      if (setAllQtyInput) {
+        setAllQtyInput.disabled = !this.checked;
+        setAllQtyInput.value = '';
+      }
       updateKirimPutriTotal();
+    });
+  }
+
+  const setAllQtyInput = document.querySelector('.set-all-qty-input');
+  if (setAllQtyInput) {
+    setAllQtyInput.addEventListener('input', function () {
+      const masterQtyValue = this.value;
+      const masterQty = parseInt(masterQtyValue, 10);
+
+      if (!masterQtyValue || isNaN(masterQty) || masterQty <= 0) {
+        return;
+      }
+
+      const selectedCards = kirimPutriCartContainer.querySelectorAll('.kirim-putri-item.selected');
+      selectedCards.forEach(card => {
+        const qtyInput = card.querySelector('.kirim-putri-qty');
+        if (qtyInput) {
+          const maxStock = parseInt(qtyInput.max, 10);
+          qtyInput.value = Math.min(masterQty, maxStock);
+          qtyInput.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      });
     });
   }
 
