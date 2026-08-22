@@ -130,7 +130,7 @@ function renderKirimPutriCart() {
   });
 
   if (selectAllEl) {
-    const setAllQtyInput = document.querySelector('.set-all-qty-input');
+    const setAllQtyInput = kirimPutriCartContainer.querySelector('.set-all-qty-input');
     selectAllEl.checked = false;
     if (setAllQtyInput) setAllQtyInput.disabled = true;
 
@@ -161,7 +161,7 @@ function renderKirimPutriCart() {
     });
   }
 
-  const setAllQtyInput = document.querySelector('.set-all-qty-input');
+  const setAllQtyInput = kirimPutriCartContainer.querySelector('.set-all-qty-input');
   if (setAllQtyInput) {
     setAllQtyInput.addEventListener('input', function () {
       const masterQtyValue = this.value;

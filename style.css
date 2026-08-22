@@ -1932,6 +1932,14 @@ tfoot td {
   font-size: 15px;
 }
 
+.kirim-putri-cart-header .set-all-qty-input {
+  position: static;
+  top: auto;
+  height: 36px;
+  width: 120px;
+  font-size: 14px;
+}
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -3273,6 +3281,8 @@ body.dark-mode .input-sisa-stok:focus {
 }
 
 .kirim-putri-cart-header .set-all-qty-input {
+  position: static;
+  top: auto;
   width: 120px;
   height: 36px;
   padding: 0 10px;
