@@ -3274,6 +3274,8 @@ body.dark-mode .input-sisa-stok:focus {
   color: var(--text-main);
   user-select: none;
   white-space: nowrap;
+  flex: 1;
+  min-width: 0;
 }
 
 .kirim-putri-cart-header .set-all-qty-wrapper {
