@@ -3256,13 +3256,12 @@ body.dark-mode .input-sisa-stok:focus {
 .kirim-putri-cart-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  justify-content: flex-start;
+  gap: 12px;
   margin-bottom: 16px;
   padding-bottom: 12px;
   border-bottom: 1px solid var(--border-color);
   padding-left: 16px;
-  padding-right: 16px;
 }
 
 .kirim-putri-cart-header .select-all-label {
@@ -3275,8 +3274,6 @@ body.dark-mode .input-sisa-stok:focus {
   color: var(--text-main);
   user-select: none;
   white-space: nowrap;
-  flex: 1;
-  min-width: 0;
 }
 
 .kirim-putri-cart-header .set-all-qty-wrapper {
@@ -3285,8 +3282,8 @@ body.dark-mode .input-sisa-stok:focus {
 }
 
 .kirim-putri-cart-header .set-all-qty-input {
-  position: static;
-  top: auto;
+  position: relative;
+  top: -6px;
   width: 120px;
   height: 36px;
   padding: 0 10px;
@@ -3296,7 +3293,6 @@ body.dark-mode .input-sisa-stok:focus {
   color: var(--text-main);
   text-align: center;
   font-size: 14px;
-  margin-left: auto;
 }
 
 .kirim-putri-cart-header .set-all-qty-input:disabled {
