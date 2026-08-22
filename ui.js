@@ -88,7 +88,10 @@ menuList.addEventListener('click', function (event) {
     if (clickedItem.dataset.page === 'kirimPutri') {
       if (typeof initKirimPutri === 'function') initKirimPutri();
     }
-    if (clickedItem.dataset.page === 'sisa') renderSisa();
+    if (clickedItem.dataset.page === 'sisa') {
+      populateSisaFilter();
+      renderSisa();
+    }
   }
 });
 

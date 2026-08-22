@@ -33,6 +33,8 @@ function refreshAppViews() {
   renderGudang();
   renderGudangItemTable();
   populateBarangKeluarForm(); // Panggil agar form terisi saat pertama kali load
+  populateSisaFilter();
+  renderSisa();
   renderHomePage();
 }
 

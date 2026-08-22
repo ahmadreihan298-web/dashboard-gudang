@@ -27,15 +27,48 @@ const arrowKode = document.getElementById('arrowKode');
 // ================================================================
 //  HALAMAN SISA
 // ================================================================
+let sisaFilterKode = '__semua';
+let sisaSearchTerm = '';
+
+function populateSisaFilter() {
+  const select = document.getElementById('filterSisaKode');
+  if (!select) return;
+  const kodes = getAllUniqueKodes(dataBarang);
+  select.innerHTML = '<option value="__semua">Semua Kode</option>';
+  kodes.forEach(k => {
+    const opt = document.createElement('option');
+    opt.value = k;
+    opt.textContent = k;
+    select.appendChild(opt);
+  });
+  select.value = sisaFilterKode;
+}
+
 function renderSisa() {
   const container = document.getElementById('tabelSisa');
+  const jumlahFilterEl = document.getElementById('jumlahSisaFilter');
   if (!container) return;
 
-  const sorted = [...dataBarang].sort((a, b) => (a.nama || '').localeCompare(b.nama || '', 'id'));
+  let filtered = dataBarang;
+  if (sisaFilterKode !== '__semua') {
+    filtered = filtered.filter(item => splitKode(item.kode).includes(sisaFilterKode));
+  }
+  if (sisaSearchTerm) {
+    const term = sisaSearchTerm.toLowerCase();
+    filtered = filtered.filter(item => {
+      const text = `${item.nama} ${item.supplier} ${item.gudang || ''} ${item.kode}`.toLowerCase();
+      return text.includes(term);
+    });
+  }
+
+  const sorted = [...filtered].sort((a, b) => (a.nama || '').localeCompare(b.nama || '', 'id'));
   if (sorted.length === 0) {
     container.innerHTML = `<tr><td colspan="5" class="empty-table">Tidak ada data</td></tr>`;
+    if (jumlahFilterEl) jumlahFilterEl.textContent = '0 item';
     return;
   }
+  if (jumlahFilterEl) jumlahFilterEl.textContent = `${sorted.length} item`;
+
   container.innerHTML = sorted.map((item, index) => {
     const badgeHtml = splitKode(item.kode).map(k => `<span class="badge">${k}</span>`).join(' ');
     const sisa = item.sisa || 0;
@@ -76,6 +109,23 @@ document.getElementById('tabelSisa')?.addEventListener('keydown', function (even
   renderGudangItemTable();
   showSisaDoneToast();
 });
+
+const searchSisaInput = document.getElementById('searchSisa');
+const filterSisaKodeSelect = document.getElementById('filterSisaKode');
+
+if (searchSisaInput) {
+  searchSisaInput.addEventListener('input', function () {
+    sisaSearchTerm = this.value.trim();
+    renderSisa();
+  });
+}
+
+if (filterSisaKodeSelect) {
+  filterSisaKodeSelect.addEventListener('change', function () {
+    sisaFilterKode = this.value;
+    renderSisa();
+  });
+}
 
 function showSisaDoneToast() {
   const existing = document.getElementById('sisa-done-toast');
@@ -253,6 +303,7 @@ tbody.addEventListener('click', function(e) {
   currentEditIdx = idx;
   document.getElementById('editItemTitle').textContent = `Edit ${item.nama}`;
   document.getElementById('editItemName').textContent = item.nama;
+  document.getElementById('editKode').value = item.kode;
   document.getElementById('editNama').value = item.nama;
   document.getElementById('editSupplier').value = item.supplier;
   document.getElementById('editGudang').value = item.gudang;
@@ -313,6 +364,7 @@ document.getElementById('saveEditItemBtn').addEventListener('click', function() 
   const item = dataBarang.find(d => d._idx === currentEditIdx);
   if (!item) return;
 
+  item.kode = document.getElementById('editKode').value;
   item.nama = document.getElementById('editNama').value;
   item.supplier = document.getElementById('editSupplier').value;
   item.gudang = document.getElementById('editGudang').value;

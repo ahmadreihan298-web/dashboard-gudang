@@ -57,7 +57,8 @@ function renderKirimPutriCart() {
         <div class="kirim-putri-item" data-idx="${item._idx}">
           <div class="kirim-putri-item-info">
             <div class="kirim-putri-item-name">${item.nama}</div>
-            <div class="kirim-putri-item-meta">Gudang: ${item.gudang || 'N/A'} | Stok: ${getStok(item).toLocaleString('id-ID')}</div>
+            <div class="kirim-putri-item-meta">Gudang: ${item.gudang || 'N/A'}</div>
+            <div class="kirim-putri-item-stock">Stok: ${getStok(item).toLocaleString('id-ID')}</div>
           </div>
           <div class="kirim-putri-item-actions">
             <div class="kirim-putri-item-qty">

@@ -280,6 +280,19 @@
           <p class="subtitle" style="margin-bottom: 0;"></p>
         </div>
       </div>
+      <div class="filter-area">
+        <label for="filterSisaKode"><i data-feather="filter"></i> Filter Kode :</label>
+        <select id="filterSisaKode">
+          <option value="__semua">Semua Kode</option>
+        </select>
+        <span class="badge-filter" id="jumlahSisaFilter">0 item</span>
+      </div>
+      <div class="search-container">
+        <div class="search-wrapper">
+          <i data-feather="search" class="search-icon"></i>
+          <input type="text" class="search-input" id="searchSisa" placeholder="Cari nama, supplier, atau gudang..." autocomplete="off" />
+        </div>
+      </div>
       <div class="table-wrapper">
         <table>
           <thead>
@@ -709,10 +722,14 @@
      <div class="modal-content">
        <h3 id="editItemTitle">Edit Data Barang</h3>
        <p id="editItemName"></p>
-       <div class="modal-form-group">
-         <label for="editNama">Nama Barang</label>
-         <input type="text" id="editNama" required>
-       </div>
+        <div class="modal-form-group">
+          <label for="editKode">Kode</label>
+          <input type="text" id="editKode" required>
+        </div>
+        <div class="modal-form-group">
+          <label for="editNama">Nama Barang</label>
+          <input type="text" id="editNama" required>
+        </div>
        <div class="modal-form-group">
          <label for="editSupplier">Supplier</label>
          <input type="text" id="editSupplier" required>

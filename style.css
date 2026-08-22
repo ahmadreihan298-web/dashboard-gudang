@@ -2575,13 +2575,681 @@ body.dark-mode .menu-list::-webkit-scrollbar-thumb {
   background: #334155;
 }
 
+/* Dark mode: tabel & komponen umum */
+body.dark-mode .badge {
+  background: #1e3a5f;
+  color: #93c5fd;
+  border-color: #2563eb;
+}
+
+body.dark-mode .badge-filter {
+  background: #1e293b;
+  color: #94a3b8;
+  border-color: #334155;
+}
+
+body.dark-mode .status-lunas {
+  background: #064e3b;
+  color: #6ee7b7;
+}
+
+body.dark-mode .status-proses {
+  background: #78350f;
+  color: #fcd34d;
+}
+
+body.dark-mode .text-lunas {
+  color: #6ee7b7;
+}
+
+body.dark-mode .text-kurang {
+  color: #fcd34d;
+}
+
+body.dark-mode .btn-export {
+  background: #1e293b;
+  color: #f1f5f9;
+  border-color: #334155;
+}
+
+body.dark-mode .btn-export:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+body.dark-mode .empty-table {
+  color: #64748b;
+}
+
+body.dark-mode .riwayat-kosong {
+  color: #64748b;
+}
+
+body.dark-mode .home-stat-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode .home-stat-label {
+  color: #94a3b8;
+}
+
+body.dark-mode .home-stat-value {
+  color: #f1f5f9;
+}
+
+body.dark-mode .home-live-card {
+  background: #1e293b;
+  border-color: #334155;
+  color: #94a3b8;
+}
+
+body.dark-mode .home-live-card strong {
+  color: #f1f5f9;
+}
+
+body.dark-mode .quick-action-btn {
+  background: #1e293b;
+  color: #f1f5f9;
+  border-color: #334155;
+}
+
+body.dark-mode .quick-action-btn:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+body.dark-mode .section-title {
+  color: #f1f5f9;
+}
+
+body.dark-mode .footer-info {
+  color: #94a3b8;
+}
+
+body.dark-mode .footer-info strong {
+  color: #f1f5f9;
+}
+
+body.dark-mode .btn-proses {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+body.dark-mode .btn-proses:hover {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+body.dark-mode .btn-undo {
+  background: #1e293b;
+  color: #f1f5f9;
+  border-color: #334155;
+}
+
+body.dark-mode .btn-undo:hover {
+  background: #475569;
+  border-color: #475569;
+}
+
+body.dark-mode .btn-neutral {
+  background: #1e293b;
+  color: #f1f5f9;
+  border-color: #334155;
+}
+
+body.dark-mode .btn-neutral:hover {
+  background: #475569;
+  border-color: #475569;
+}
+
+body.dark-mode .btn-danger {
+  background: #7f1d1d;
+  color: #fecaca;
+  border-color: #991b1b;
+}
+
+body.dark-mode .btn-danger:hover {
+  background: #991b1b;
+  border-color: #b91c1c;
+}
+
+body.dark-mode .btn-success {
+  background: #064e3b;
+  color: #a7f3d0;
+  border-color: #065f46;
+}
+
+body.dark-mode .btn-success:hover {
+  background: #065f46;
+  border-color: #047857;
+}
+
+body.dark-mode .btn-warning {
+  background: #78350f;
+  color: #fde68a;
+  border-color: #92400e;
+}
+
+body.dark-mode .btn-warning:hover {
+  background: #92400e;
+  border-color: #b45309;
+}
+
+body.dark-mode .btn-login {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+body.dark-mode .btn-login:hover {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+body.dark-mode .btn-delete-warehouse {
+  background: #7f1d1d;
+  color: #fecaca;
+  border-color: #991b1b;
+}
+
+body.dark-mode .btn-delete-warehouse:hover {
+  background: #991b1b;
+  border-color: #b91c1c;
+}
+
+body.dark-mode .card,
+body.dark-mode .modal-content,
+body.dark-mode .form-container {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+body.dark-mode .modal-content label,
+body.dark-mode .form-container label {
+  color: #e2e8f0;
+}
+
+body.dark-mode .table-wrapper {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode table {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode thead th {
+  background: #1e293b;
+  color: #93c5fd;
+  border-color: #334155;
+}
+
+body.dark-mode tbody td {
+  color: #e2e8f0;
+  border-color: #334155;
+}
+
+body.dark-mode tfoot td {
+  background: #1e293b;
+  color: #e2e8f0;
+  border-color: #334155;
+}
+
+body.dark-mode tr:hover td {
+  background: #334155;
+}
+
+body.dark-mode .input-form input,
+body.dark-mode .input-form select {
+  background: #0f172a;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+body.dark-mode .input-form input:focus,
+body.dark-mode .input-form select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+body.dark-mode .sidebar {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode .sidebar-brand-text {
+  color: #f1f5f9;
+}
+
+body.dark-mode .sidebar-brand-sub {
+  color: #94a3b8;
+}
+
+body.dark-mode .menu-item span {
+  color: #cbd5e1;
+}
+
+body.dark-mode .menu-item.active {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+body.dark-mode .menu-item.active span {
+  color: #ffffff;
+}
+
+body.dark-mode .menu-item.active .icon svg {
+  stroke: #ffffff;
+}
+
+body.dark-mode .menu-item-danger {
+  color: #fecaca;
+}
+
+body.dark-mode .menu-item-danger span {
+  color: #fecaca;
+}
+
+body.dark-mode .menu-item-danger .icon svg {
+  stroke: #fecaca;
+}
+
+body.dark-mode .toggle-btn {
+  color: #f1f5f9;
+}
+
+body.dark-mode .hamburger span {
+  background: #f1f5f9;
+}
+
+body.dark-mode .sidebar-divider {
+  background: #334155;
+}
+
+body.dark-mode .kirim-putri-item {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode .kirim-putri-item.selected {
+  border-color: #2563eb;
+  background: #1e3a5f;
+}
+
+body.dark-mode .kirim-putri-item-name {
+  color: #f1f5f9;
+}
+
+body.dark-mode .kirim-putri-item-meta {
+  color: #94a3b8;
+}
+
+body.dark-mode .kirim-putri-item-stock {
+  color: #94a3b8;
+}
+
+body.dark-mode .kirim-putri-item-qty input {
+  background: #0f172a;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+body.dark-mode .kirim-putri-item-subtotal {
+  color: #60a5fa;
+}
+
+body.dark-mode .kirim-putri-group {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode .kirim-putri-group-header {
+  background: #1e3a5f;
+  color: #93c5fd;
+  border-color: #334155;
+}
+
+body.dark-mode .kirim-putri-cart-header {
+  border-color: #334155;
+}
+
+body.dark-mode .kirim-putri-cart-header .select-all-label {
+  color: #f1f5f9;
+}
+
+body.dark-mode .kirim-putri-checkbox {
+  background: #0f172a;
+  border-color: #334155;
+}
+
+body.dark-mode #kirimPutriSelectAll:checked ~ .kirim-putri-checkbox {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+body.dark-mode .select-all-checkbox {
+  accent-color: #2563eb;
+}
+
+body.dark-mode .set-all-qty-input {
+  background: #0f172a;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+body.dark-mode .set-all-qty-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+body.dark-mode .btn-show-history {
+  background: #1e293b;
+  color: #93c5fd;
+  border-color: #334155;
+}
+
+body.dark-mode .btn-show-history:hover {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+body.dark-mode .btn-add-order {
+  background: #1e293b;
+  color: #6ee7b7;
+  border-color: #334155;
+}
+
+body.dark-mode .btn-add-order:hover {
+  background: #064e3b;
+  color: #a7f3d0;
+  border-color: #065f46;
+}
+
+body.dark-mode .btn-edit {
+  background: #1e293b;
+  color: #f1f5f9;
+  border-color: #334155;
+}
+
+body.dark-mode .btn-edit:hover {
+  background: #475569;
+  border-color: #475569;
+}
+
+body.dark-mode .gudang-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode .gudang-card-header {
+  color: #f1f5f9;
+  border-color: #334155;
+}
+
+body.dark-mode .gudang-stat-label {
+  color: #94a3b8;
+}
+
+body.dark-mode .gudang-stat-value {
+  color: #f1f5f9;
+}
+
+body.dark-mode .modal-overlay {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+body.dark-mode .search-container {
+  background: #1e293b;
+}
+
+body.dark-mode .search-wrapper {
+  background: #0f172a;
+  border-color: #334155;
+}
+
+body.dark-mode .search-icon {
+  color: #94a3b8;
+}
+
+body.dark-mode .filter-area {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode .filter-area label {
+  color: #e2e8f0;
+}
+
+body.dark-mode .stats-box {
+  background: #1e293b;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+body.dark-mode .stats-box strong {
+  color: #f1f5f9;
+}
+
+body.dark-mode .total-harga-panel {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+body.dark-mode .total-harga-label {
+  color: #94a3b8;
+}
+
+body.dark-mode .total-harga-value {
+  color: #f1f5f9;
+}
+
+body.dark-mode .subtitle {
+  color: #94a3b8;
+}
+
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .header-section {
+  border-color: #334155;
+}
+
+body.dark-mode .table-head-bar {
+  border-color: #334155;
+}
+
+body.dark-mode .scroll-nav-btn {
+  background: #1e293b;
+  color: #f1f5f9;
+  border-color: #334155;
+}
+
+body.dark-mode .scroll-nav-btn:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+body.dark-mode .scroll-nav-btn:disabled {
+  background: #0f172a;
+  color: #475569;
+  border-color: #334155;
+}
+
+body.dark-mode .login-body {
+  background: #0f172a;
+}
+
+body.dark-mode .login-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode .login-brand h1 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .login-sub {
+  color: #94a3b8;
+}
+
+body.dark-mode .login-form-group label {
+  color: #e2e8f0;
+}
+
+body.dark-mode .login-error {
+  color: #fecaca;
+  background: #7f1d1d;
+}
+
+body.dark-mode .login-hint {
+  color: #64748b;
+}
+
+body.dark-mode .hp-body {
+  background: #0f172a;
+}
+
+body.dark-mode .hp-header {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode .hp-user-info {
+  color: #f1f5f9;
+}
+
+body.dark-mode .hp-sidebar {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode .hp-sidebar-title {
+  color: #f1f5f9;
+  border-color: #334155;
+}
+
+body.dark-mode .hp-sidebar-item {
+  color: #cbd5e1;
+}
+
+body.dark-mode .hp-sidebar-item.active {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+body.dark-mode .hp-sidebar-item:hover {
+  background: #334155;
+  color: #f1f5f9;
+}
+
+body.dark-mode .hp-sidebar-divider {
+  background: #334155;
+}
+
+body.dark-mode .hp-overlay {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .hp-form-label {
+  color: #f1f5f9;
+}
+
+body.dark-mode .hp-total-label {
+  color: #94a3b8;
+}
+
+body.dark-mode .hp-total-value {
+  color: #f1f5f9;
+}
+
+body.dark-mode .hp-stock-row {
+  border-color: #334155;
+}
+
+body.dark-mode .hp-stock-name {
+  color: #f1f5f9;
+}
+
+body.dark-mode .hp-stock-kode {
+  color: #93c5fd;
+}
+
+body.dark-mode .hp-stock-gudang {
+  color: #94a3b8;
+}
+
+body.dark-mode .hp-stock-qty {
+  color: #f1f5f9;
+}
+
+body.dark-mode .hp-history-row {
+  border-color: #334155;
+}
+
+body.dark-mode .hp-history-name {
+  color: #f1f5f9;
+}
+
+body.dark-mode .hp-history-date {
+  color: #94a3b8;
+}
+
+body.dark-mode .hp-history-qty {
+  color: #f1f5f9;
+}
+
+body.dark-mode .sisa-done-toast {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode .sisa-done-toast span {
+  color: #f1f5f9;
+}
+
+body.dark-mode .form-group label {
+  color: #e2e8f0;
+}
+
+body.dark-mode .form-actions {
+  border-color: #334155;
+}
+
+body.dark-mode .table-scroll-nav {
+  border-color: #334155;
+}
+
+body.dark-mode .input-sisa-stok {
+  background: #0f172a;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+body.dark-mode .input-sisa-stok:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
 /* ================================================================
    KIRIM KE PUTRI
    ================================================================ */
 .kirim-putri-cart-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 12px;
   margin-bottom: 16px;
   padding-bottom: 12px;
   border-bottom: 1px solid var(--border-color);
@@ -2596,7 +3264,6 @@ body.dark-mode .menu-list::-webkit-scrollbar-thumb {
   font-weight: 500;
   color: var(--text-main);
   user-select: none;
-  position: relative;
 }
 
 .kirim-putri-cart-header input[type="checkbox"] {
@@ -2604,28 +3271,11 @@ body.dark-mode .menu-list::-webkit-scrollbar-thumb {
   height: 18px;
   accent-color: var(--primary);
   cursor: pointer;
-}
-
-.kirim-putri-cart-header #kirimPutriSelectAll {
-  position: absolute;
-  opacity: 0;
-  width: 46px;
-  height: 46px;
   margin: 0;
-  cursor: pointer;
 }
 
 .kirim-putri-cart-header .kirim-putri-checkbox {
-  display: inline-block;
-  flex-shrink: 0;
-  width: 46px;
-  height: 46px;
-  margin-left: 54px;
-  border: 2px solid var(--border-color);
-  border-radius: 8px;
-  background: var(--bg-surface);
-  position: relative;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  display: none;
 }
 
 .kirim-putri-cart-header .kirim-putri-checkbox::before {
@@ -2651,9 +3301,8 @@ body.dark-mode .menu-list::-webkit-scrollbar-thumb {
 }
 
 .kirim-putri-cart-grid {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 10px;
 }
 
@@ -2675,18 +3324,16 @@ body.dark-mode .menu-list::-webkit-scrollbar-thumb {
 }
 
 .kirim-putri-item {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   padding: 10px 12px;
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  align-items: center;
+  align-items: stretch;
   transition: background 0.2s ease, border-color 0.2s ease;
-  flex: 1 1 auto;
-  min-width: 220px;
-  max-width: 100%;
+  width: 100%;
   cursor: pointer;
 }
 
@@ -2714,12 +3361,21 @@ body.dark-mode .menu-list::-webkit-scrollbar-thumb {
   font-size: 13px;
   color: var(--text-main);
   margin-bottom: 2px;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  line-height: 1.3;
+}
+
+.kirim-putri-item-meta {
+  font-size: 12px;
+  color: var(--text-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.kirim-putri-item-meta {
+.kirim-putri-item-stock {
   font-size: 12px;
   color: var(--text-muted);
   white-space: nowrap;
@@ -2731,8 +3387,8 @@ body.dark-mode .menu-list::-webkit-scrollbar-thumb {
   display: flex;
   align-items: center;
   gap: 10px;
-  flex-wrap: wrap;
-  justify-content: flex-end;
+  justify-content: space-between;
+  white-space: nowrap;
 }
 
 .kirim-putri-item-qty input {
